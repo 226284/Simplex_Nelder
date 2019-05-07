@@ -1,4 +1,6 @@
-﻿using System;
+﻿using OxyPlot;
+using OxyPlot.Series;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,7 +28,6 @@ namespace Simplex
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
         }
     }
 }
