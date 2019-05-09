@@ -37,21 +37,7 @@ namespace Simplex
 
         private void InitializeGUI()
         {
-            wnd_maxcond1.Visibility = Visibility.Hidden;
-            wnd_mincond1.Visibility = Visibility.Hidden;
-            wnd_varcond1.Visibility = Visibility.Hidden;
-            wnd_maxcond2.Visibility = Visibility.Hidden;
-            wnd_mincond2.Visibility = Visibility.Hidden;
-            wnd_varcond2.Visibility = Visibility.Hidden;
-            wnd_maxcond3.Visibility = Visibility.Hidden;
-            wnd_mincond3.Visibility = Visibility.Hidden;
-            wnd_varcond3.Visibility = Visibility.Hidden;
-            wnd_maxcond4.Visibility = Visibility.Hidden;
-            wnd_mincond4.Visibility = Visibility.Hidden;
-            wnd_varcond4.Visibility = Visibility.Hidden;
-            wnd_maxcond5.Visibility = Visibility.Hidden;
-            wnd_mincond5.Visibility = Visibility.Hidden;
-            wnd_varcond5.Visibility = Visibility.Hidden;
+            HideAllConditions();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -121,10 +107,38 @@ namespace Simplex
                 return;
             }
 
+            DisableAllConditions();
+
+            // check parameters
+            try
+            {
+                double tmp;
+                Double.TryParse(this.wnd_a.Text, out tmp);
+                Algorithm.a = tmp;
+                Double.TryParse(this.wnd_b.Text, out tmp);
+                Algorithm.b = tmp;
+                Double.TryParse(this.wnd_c.Text, out tmp);
+                Algorithm.c = tmp;
+                Double.TryParse(this.wnd_epsilon.Text, out tmp);
+                Algorithm.epsilon = tmp;
+
+                this.wnd_a.IsEnabled = false;
+                this.wnd_b.IsEnabled = false;
+                this.wnd_c.IsEnabled = false;
+                this.wnd_epsilon.IsEnabled = false;
+            }
+            catch
+            {
+                throw new Exception("Incorrect Parameters");
+            }
+
             if (gui_fun != null && gui_limits != null)
             {
                 alg = new Algorithm(gui_fun, gui_limits);
             }
+
+            wnd_oblicz.Visibility = Visibility.Hidden;
+            wnd_restart.Visibility = Visibility.Visible;
         }
 
         private void Wnd_fun_KeyDown(object sender, KeyEventArgs e)
@@ -137,25 +151,10 @@ namespace Simplex
 
         private void ValidateFunction()
         {
-            wnd_maxcond1.Visibility = Visibility.Hidden;
-            wnd_mincond1.Visibility = Visibility.Hidden;
-            wnd_varcond1.Visibility = Visibility.Hidden;
-            wnd_maxcond2.Visibility = Visibility.Hidden;
-            wnd_mincond2.Visibility = Visibility.Hidden;
-            wnd_varcond2.Visibility = Visibility.Hidden;
-            wnd_maxcond3.Visibility = Visibility.Hidden;
-            wnd_mincond3.Visibility = Visibility.Hidden;
-            wnd_varcond3.Visibility = Visibility.Hidden;
-            wnd_maxcond4.Visibility = Visibility.Hidden;
-            wnd_mincond4.Visibility = Visibility.Hidden;
-            wnd_varcond4.Visibility = Visibility.Hidden;
-            wnd_maxcond5.Visibility = Visibility.Hidden;
-            wnd_mincond5.Visibility = Visibility.Hidden;
-            wnd_varcond5.Visibility = Visibility.Hidden;
+            HideAllConditions();
 
             var str_fun = this.wnd_fun.Text;
             gui_fun = new Function(str_fun);
-            this.wnd_debug.Text = this.wnd_debug.Text + gui_fun.getArgumentsNumber() + "\n";
 
             if (gui_fun.checkSyntax() == false)
             {
@@ -226,6 +225,90 @@ namespace Simplex
 
                 throw new Exception("Incorrect variables number");
             }
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ValidateFunction();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return;
+            }
+        }
+
+        private void Wnd_restart_Click(object sender, RoutedEventArgs e)
+        {
+            wnd_oblicz.Visibility = Visibility.Visible;
+            wnd_restart.Visibility = Visibility.Hidden;
+
+            HideAllConditions();
+            EnableAllConditions();
+
+            this.wnd_a.IsEnabled = true;
+            this.wnd_b.IsEnabled = true;
+            this.wnd_c.IsEnabled = true;
+            this.wnd_epsilon.IsEnabled = true;
+        }
+
+        private void HideAllConditions()
+        {
+            wnd_maxcond1.Visibility = Visibility.Hidden;
+            wnd_mincond1.Visibility = Visibility.Hidden;
+            wnd_varcond1.Visibility = Visibility.Hidden;
+            wnd_maxcond2.Visibility = Visibility.Hidden;
+            wnd_mincond2.Visibility = Visibility.Hidden;
+            wnd_varcond2.Visibility = Visibility.Hidden;
+            wnd_maxcond3.Visibility = Visibility.Hidden;
+            wnd_mincond3.Visibility = Visibility.Hidden;
+            wnd_varcond3.Visibility = Visibility.Hidden;
+            wnd_maxcond4.Visibility = Visibility.Hidden;
+            wnd_mincond4.Visibility = Visibility.Hidden;
+            wnd_varcond4.Visibility = Visibility.Hidden;
+            wnd_maxcond5.Visibility = Visibility.Hidden;
+            wnd_mincond5.Visibility = Visibility.Hidden;
+            wnd_varcond5.Visibility = Visibility.Hidden;
+        }
+
+        private void DisableAllConditions()
+        {
+            wnd_maxcond1.IsEnabled = false;
+            wnd_mincond1.IsEnabled = false;
+            wnd_varcond1.IsEnabled = false;
+            wnd_maxcond2.IsEnabled = false;
+            wnd_mincond2.IsEnabled = false;
+            wnd_varcond2.IsEnabled = false;
+            wnd_maxcond3.IsEnabled = false;
+            wnd_mincond3.IsEnabled = false;
+            wnd_varcond3.IsEnabled = false;
+            wnd_maxcond4.IsEnabled = false;
+            wnd_mincond4.IsEnabled = false;
+            wnd_varcond4.IsEnabled = false;
+            wnd_maxcond5.IsEnabled = false;
+            wnd_mincond5.IsEnabled = false;
+            wnd_varcond5.IsEnabled = false;
+        }
+
+        private void EnableAllConditions()
+        {
+            wnd_maxcond1.IsEnabled = true;
+            wnd_mincond1.IsEnabled = true;
+            wnd_varcond1.IsEnabled = true;
+            wnd_maxcond2.IsEnabled = true;
+            wnd_mincond2.IsEnabled = true;
+            wnd_varcond2.IsEnabled = true;
+            wnd_maxcond3.IsEnabled = true;
+            wnd_mincond3.IsEnabled = true;
+            wnd_varcond3.IsEnabled = true;
+            wnd_maxcond4.IsEnabled = true;
+            wnd_mincond4.IsEnabled = true;
+            wnd_varcond4.IsEnabled = true;
+            wnd_maxcond5.IsEnabled = true;
+            wnd_mincond5.IsEnabled = true;
+            wnd_varcond5.IsEnabled = true;
         }
     }
 }
