@@ -1,6 +1,7 @@
 ﻿using org.mariuszgromada.math.mxparser;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,8 +24,9 @@ namespace Simplex
     public partial class MainWindow : Window
     {
         private Function gui_fun;
-        private List<Tuple<float, float>> gui_limits;
+        private List<Tuple<double, double>> gui_limits;
         private IAlgorithm alg;
+        private int tmp_vars;
 
         public MainWindow()
         {
@@ -71,7 +73,53 @@ namespace Simplex
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
-            if (ValidateFunction() == false) return;
+            try
+            {
+                ValidateFunction();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return;
+            }
+
+            gui_limits = new List<Tuple<double, double>>();
+
+            try
+            {
+                if (tmp_vars == 2)
+                {
+                    double min, max;
+                    Double.TryParse(wnd_mincond1.Text, out min);
+                    Double.TryParse(wnd_maxcond1.Text, out max);
+                    gui_limits.Add(new Tuple<double, double>(min, max));
+
+                    Double.TryParse(wnd_mincond2.Text, out min);
+                    Double.TryParse(wnd_maxcond2.Text, out max);
+                    gui_limits.Add(new Tuple<double, double>(min, max));
+                }
+
+                if (tmp_vars == 3)
+                {
+                    double min, max;
+                    Double.TryParse(wnd_mincond1.Text, out min);
+                    Double.TryParse(wnd_maxcond1.Text, out max);
+                    gui_limits.Add(new Tuple<double, double>(min, max));
+
+                    Double.TryParse(wnd_mincond2.Text, out min);
+                    Double.TryParse(wnd_maxcond2.Text, out max);
+                    gui_limits.Add(new Tuple<double, double>(min, max));
+
+                    Double.TryParse(wnd_mincond3.Text, out min);
+                    Double.TryParse(wnd_maxcond3.Text, out max);
+                    gui_limits.Add(new Tuple<double, double>(min, max));
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Incorrect limits");
+                return;
+            }
 
             if (gui_fun != null && gui_limits != null)
             {
@@ -87,7 +135,7 @@ namespace Simplex
             }
         }
 
-        private bool ValidateFunction()
+        private void ValidateFunction()
         {
             wnd_maxcond1.Visibility = Visibility.Hidden;
             wnd_mincond1.Visibility = Visibility.Hidden;
@@ -109,15 +157,16 @@ namespace Simplex
             gui_fun = new Function(str_fun);
             this.wnd_debug.Text = this.wnd_debug.Text + gui_fun.getArgumentsNumber() + "\n";
 
-            if(gui_fun.checkSyntax() == false)
+            if (gui_fun.checkSyntax() == false)
             {
                 MessageBoxResult result = MessageBox.Show(this, "Nieprawidłowa składnia funkcji:\n" + gui_fun.getErrorMessage(), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
+
+                throw new Exception("Incorrect function syntax");
             }
 
-            var vars = gui_fun.getArgumentsNumber();
+            tmp_vars = gui_fun.getArgumentsNumber();
 
-            if (vars == 2)
+            if (tmp_vars == 2)
             {
                 wnd_maxcond1.Visibility = Visibility.Visible;
                 wnd_mincond1.Visibility = Visibility.Visible;
@@ -126,7 +175,7 @@ namespace Simplex
                 wnd_mincond2.Visibility = Visibility.Visible;
                 wnd_varcond2.Visibility = Visibility.Visible;
             }
-            else if (vars == 3)
+            else if (tmp_vars == 3)
             {
                 wnd_maxcond1.Visibility = Visibility.Visible;
                 wnd_mincond1.Visibility = Visibility.Visible;
@@ -138,7 +187,7 @@ namespace Simplex
                 wnd_mincond3.Visibility = Visibility.Visible;
                 wnd_varcond3.Visibility = Visibility.Visible;
             }
-            else if (vars == 4)
+            else if (tmp_vars == 4)
             {
                 wnd_maxcond1.Visibility = Visibility.Visible;
                 wnd_mincond1.Visibility = Visibility.Visible;
@@ -153,7 +202,7 @@ namespace Simplex
                 wnd_mincond4.Visibility = Visibility.Visible;
                 wnd_varcond4.Visibility = Visibility.Visible;
             }
-            else if (vars == 5)
+            else if (tmp_vars == 5)
             {
                 wnd_maxcond1.Visibility = Visibility.Visible;
                 wnd_mincond1.Visibility = Visibility.Visible;
@@ -174,9 +223,9 @@ namespace Simplex
             else
             {
                 MessageBoxResult result = MessageBox.Show(this, "Nieprawidłowa ilość zmiennych", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
+
+                throw new Exception("Incorrect variables number");
             }
-            return true;
         }
     }
 }
