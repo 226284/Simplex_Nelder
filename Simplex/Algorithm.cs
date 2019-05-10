@@ -1,6 +1,7 @@
 ﻿using org.mariuszgromada.math.mxparser;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,7 @@ namespace Simplex
         private double[] Pp;
         private int h, L, ZW;
 
+        public List<List<double[]>> points;
         public Action CalculatedSucc;
 
         public Algorithm(Function fn, List<Tuple<double, double>> lm)
@@ -34,9 +36,12 @@ namespace Simplex
             function = fn;
             limits = lm;
             vars_number = function.getArgumentsNumber();
-            tips_number = vars_number + 1;            
+            tips_number = vars_number + 1;
+            points = new List<List<double[]>>();
 
             RandPoints();
+            points.Add(simplex);
+            //new LayerViewModel(fn);
             BegginingProcedure();
             RunSimplexRun();
         }
@@ -94,6 +99,7 @@ namespace Simplex
                     if (Fo > simplex_val[i] && i != h) // za wyjątkiem *f(Ph)
                     {
                         break_f = true;
+                        break;
                     }
                 }
 
@@ -294,7 +300,7 @@ namespace Simplex
                 }
                 j++;
             }
-
+            Debug.WriteLine(max);
             // now check if max length is smaller then the defined error
             if (max < epsilon)
             {

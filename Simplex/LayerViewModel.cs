@@ -1,4 +1,5 @@
-﻿using OxyPlot;
+﻿using org.mariuszgromada.math.mxparser;
+using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using System;
@@ -11,7 +12,7 @@ namespace Simplex
 {
     public class LayerViewModel
     {
-        public LayerViewModel()
+        public LayerViewModel(Function fn)
         {
             this.MyModel = new PlotModel { Title = "Example 1" };
 
@@ -29,21 +30,21 @@ namespace Simplex
             }
 
             // generate 2d normal distribution
-            var data = new double[100, 100];
-            for (int x = 0; x < 100; ++x)
+            var data = new double[10, 10];
+            for (int x = 0; x < 10; ++x)
             {
-                for (int y = 0; y < 100; ++y)
+                for (int y = 0; y < 10; ++y)
                 {
-                    data[y, x] = singleData[x] * singleData[(y + 30) % 100] * 100;
+                    data[y, x] = fn.calculate(x, y);
                 }
             }
 
             var heatMapSeries = new HeatMapSeries
             {
-                X0 = 0,
-                X1 = 99,
-                Y0 = 0,
-                Y1 = 99,
+                X0 = -10,
+                X1 = 10,
+                Y0 = -10,
+                Y1 = 10,
                 Interpolate = true,
                 RenderMethod = HeatMapRenderMethod.Bitmap,
                 Data = data
