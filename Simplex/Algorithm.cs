@@ -26,6 +26,8 @@ namespace Simplex
         private double[] Pprim;
         private int h, L, ZW;
 
+        public Action CalculatedSucc;
+
         public Algorithm(Function fn, List<Tuple<double, double>> lm)
         {
             function = fn;
@@ -67,9 +69,14 @@ namespace Simplex
                     simplex[h] = Pprim;
                 }
 
-                // sprawdź kryterium na minimum
-                // jeśli spełniony to koniec, jeśli nie to:
-                // RunSimplexRun();
+                if (isMinCondReached())
+                {
+                    CalculatedSucc();
+                }
+                else
+                {
+                    RunSimplexRun();
+                }
             }
             else
             {
@@ -216,15 +223,30 @@ namespace Simplex
             return tmp;
         }
 
-        /*private bool isMinCondReached()
+        private bool isMinCondReached()
         {
+            double max = 0;
             foreach (var p in simplex)
             {
+                var sum = 0.0;
                 for (int i = 0; i < vars_number; i++)
                 {
-                    p[i] -
+                    sum = sum + Math.Pow(Pprim[i] - p[i], 2);
+                }
+                var len = Math.Sqrt(sum);
+                if (len > max)
+                {
+                    max = len;
                 }
             }
-        }*/
+
+            // now check if max length is smaller then the defined error
+            if (max < epsilon)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

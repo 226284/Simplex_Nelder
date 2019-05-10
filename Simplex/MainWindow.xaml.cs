@@ -25,14 +25,20 @@ namespace Simplex
     {
         private Function gui_fun;
         private List<Tuple<double, double>> gui_limits;
-        private IAlgorithm alg;
+        private Algorithm alg;
         private int tmp_vars;
+
 
         public MainWindow()
         {
             InitializeComponent();
 
             InitializeGUI();
+        }
+
+        private void OnCalculatedSucc()
+        {
+            MessageBoxResult result = MessageBox.Show(this, "Obliczono pomyślnie", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void InitializeGUI()
@@ -135,6 +141,8 @@ namespace Simplex
             if (gui_fun != null && gui_limits != null)
             {
                 alg = new Algorithm(gui_fun, gui_limits);
+
+                alg.CalculatedSucc += OnCalculatedSucc;
             }
 
             wnd_oblicz.Visibility = Visibility.Hidden;
