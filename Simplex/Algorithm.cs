@@ -23,7 +23,7 @@ namespace Simplex
         private List<string> calculations;
         private List<double[]> simplex;
         private List<double> simplex_val;
-        private double[] Pprim;
+        private double[] Pp;
         private int h, L, ZW;
 
         public Action CalculatedSucc;
@@ -49,24 +49,24 @@ namespace Simplex
             h = simplex_val.IndexOf(simplex_val.Max());
             L = simplex_val.IndexOf(simplex_val.Min());
 
-            Pprim = CalculateCenter();
+            Pp = CalculateCenter();
 
-            var Pstar = Reflection(simplex[h], Pprim, a);
-            var Fs = function.calculate(Pprim);
+            var Pstar = Reflection(simplex[h], Pp, a);
+            var Fs = function.calculate(Pp);
             var Fo = function.calculate(Pstar);
 
             if (Fo < simplex_val[L])
             {
-                var Pprimprim = Expansion(Pstar, Pprim, c);
-                var Fe = function.calculate(Pprimprim);
+                var Ppp = Expansion(Pstar, Pp, c);
+                var Fe = function.calculate(Ppp);
 
                 if (Fe < simplex_val[h])
                 {
-                    simplex[h] = Pprimprim;
+                    simplex[h] = Ppp;
                 }
                 else
                 {
-                    simplex[h] = Pprim;
+                    simplex[h] = Pp;
                 }
 
                 if (isMinCondReached())
@@ -83,7 +83,7 @@ namespace Simplex
                 bool break_f = false;
                 for (int i = 0; i < tips_number; i++)
                 {
-                    if (Fo > simplex_val[i]) // za wyjątkiem *f(Ph)
+                    if (Fo > simplex_val[i] && i != h) // za wyjątkiem *f(Ph)
                     {
                         break_f = true;
                     }
@@ -93,41 +93,42 @@ namespace Simplex
                 {
                     if (Fo < simplex_val[h])
                     {
-                        simplex[h] = Pprim;
+                        simplex[h] = Pp;
+
+                    }
+
+
+                    var Pppp = Contraction(simplex[h], Pp, b);
+                    var Fk = function.calculate(Pppp);
+
+                    if (Fk < simplex_val[h])
+                    {
+                        simplex[h] = Pppp;
+
+                        // sprawdź warunek na minimum
                     }
                     else
                     {
-                        var Pppp = Contraction(simplex[h], Pprim, b);
-                        var Fk = function.calculate(Pppp);
-
-                        if (Fk < simplex_val[h])
+                        // wykonanie redukcji simpleksu
+                        foreach (var t in simplex)
                         {
-                            simplex[h] = Pppp;
-
-                            // sprawdź warunek na minimum
-                        }
-                        else
-                        {
-                            // wykonanie redukcji simpleksu
-                            foreach (var t in simplex)
+                            for (int i = 0; i < vars_number; i++)
                             {
-                                for (int i = 0; i < vars_number; i++)
-                                {
-                                    t[i] = 0.5 * (t[i] + simplex[L][i]);
-                                }
+                                t[i] = 0.5 * (t[i] + simplex[L][i]);
                             }
-
-                            ZW = 1;
-
-                            // sprawdź kryterium na minimum
-                            // jeśli spełniony to koniec, jeśli nie to:
-                            // RunSimplexRun();
                         }
+
+                        ZW = 1;
+
+                        // sprawdź kryterium na minimum
+                        // jeśli spełniony to koniec, jeśli nie to:
+                        // RunSimplexRun();
                     }
                 }
+
                 else
                 {
-                    simplex[h] = Pprim;
+                    simplex[h] = Pp;
 
                     // sprawdź kryterium na minimum
                     // jeśli spełniony to koniec, jeśli nie to:
@@ -206,7 +207,7 @@ namespace Simplex
             var tmp = new double[vars_number];
             for (int i = 0; i < vars_number; i++)
             {
-                tmp[i] = (1 - s) * p1[i] - s * p2[i];
+                tmp[i] = (1 - s) * p1[i] - s * p2[i]; //(1 + s)?
             }
 
             return tmp;
