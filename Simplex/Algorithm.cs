@@ -11,10 +11,10 @@ namespace Simplex
 {
     public class Algorithm : IAlgorithm
     {
-        static public double a { get; set; } //- współczynnik odbicia  a>0
-        static public double b { get; set; } //- współczynnik kontrakcji 0<b<1
-        static public double c { get; set; } //- współczynnik ekspancji c>
-        static public double epsilon { get; set; }
+        static public double a { get; set; } = 1; //- współczynnik odbicia  a>0
+        static public double b { get; set; } = 0.5; //- współczynnik kontrakcji 0<b<1
+        static public double c { get; set; } = 0.2; //- współczynnik ekspancji c>
+        static public double epsilon { get; set; } = 1;
 
         private Function function;
         private int vars_number;
@@ -36,16 +36,18 @@ namespace Simplex
             tips_number = vars_number + 1;
 
             RandPoints();
-
+            BegginingProcedure();
             RunSimplexRun();
+        }
+
+        public void BegginingProcedure()
+        {
+            simplex_val = CalculateFunction();
+            ZW = 0;
         }
 
         public void RunSimplexRun()
         {
-            simplex_val = CalculateFunction();
-
-            ZW = 0;
-
             h = simplex_val.IndexOf(simplex_val.Max());
             L = simplex_val.IndexOf(simplex_val.Min());
 
@@ -75,6 +77,10 @@ namespace Simplex
                 }
                 else
                 {
+                    if (ZW == 1)
+                    {
+                        BegginingProcedure();
+                    }
                     RunSimplexRun();
                 }
             }
@@ -94,9 +100,7 @@ namespace Simplex
                     if (Fo < simplex_val[h])
                     {
                         simplex[h] = Pp;
-
                     }
-
 
                     var Pppp = Contraction(simplex[h], Pp, b);
                     var Fk = function.calculate(Pppp);
@@ -105,7 +109,18 @@ namespace Simplex
                     {
                         simplex[h] = Pppp;
 
-                        // sprawdź warunek na minimum
+                        if (isMinCondReached())
+                        {
+                            CalculatedSucc();
+                        }
+                        else
+                        {
+                            if (ZW == 1)
+                            {
+                                BegginingProcedure();
+                            }
+                            RunSimplexRun();
+                        }
                     }
                     else
                     {
@@ -120,9 +135,18 @@ namespace Simplex
 
                         ZW = 1;
 
-                        // sprawdź kryterium na minimum
-                        // jeśli spełniony to koniec, jeśli nie to:
-                        // RunSimplexRun();
+                        if (isMinCondReached())
+                        {
+                            CalculatedSucc();
+                        }
+                        else
+                        {
+                            if (ZW == 1)
+                            {
+                                BegginingProcedure();
+                            }
+                            RunSimplexRun();
+                        }
                     }
                 }
 
@@ -130,9 +154,18 @@ namespace Simplex
                 {
                     simplex[h] = Pp;
 
-                    // sprawdź kryterium na minimum
-                    // jeśli spełniony to koniec, jeśli nie to:
-                    // RunSimplexRun();
+                    if (isMinCondReached())
+                    {
+                        CalculatedSucc();
+                    }
+                    else
+                    {
+                        if (ZW == 1)
+                        {
+                            BegginingProcedure();
+                        }
+                        RunSimplexRun();
+                    }
                 }
             }
         }
@@ -227,18 +260,33 @@ namespace Simplex
         private bool isMinCondReached()
         {
             double max = 0;
-            foreach (var p in simplex)
+            double[] p1, p2;
+            var j = 0;
+
+            while (j < tips_number)
             {
+                p1 = simplex[j];
+
+                if (j + 1 >= tips_number)
+                {
+                    p2 = simplex[0];
+                }
+                else
+                {
+                    p2 = simplex[j + 1];
+                }
+
                 var sum = 0.0;
                 for (int i = 0; i < vars_number; i++)
                 {
-                    sum = sum + Math.Pow(Pprim[i] - p[i], 2);
+                    sum = sum + Math.Pow(p1[i] - p2[i], 2);
                 }
                 var len = Math.Sqrt(sum);
                 if (len > max)
                 {
                     max = len;
                 }
+                j++;
             }
 
             // now check if max length is smaller then the defined error
