@@ -118,7 +118,7 @@ namespace Simplex
             // check parameters
             try
             {
-                double tmp;
+                /*double tmp;
                 Double.TryParse(this.wnd_a.Text, out tmp);
                 Algorithm.a = tmp;
                 Double.TryParse(this.wnd_b.Text, out tmp);
@@ -127,7 +127,7 @@ namespace Simplex
                 Algorithm.c = tmp;
                 Double.TryParse(this.wnd_epsilon.Text, out tmp);
                 Algorithm.epsilon = tmp;
-
+                */
                 this.wnd_a.IsEnabled = false;
                 this.wnd_b.IsEnabled = false;
                 this.wnd_c.IsEnabled = false;

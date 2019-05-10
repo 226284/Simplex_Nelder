@@ -9,12 +9,13 @@ using Expression = org.mariuszgromada.math.mxparser.Expression;
 
 namespace Simplex
 {
+
     public class Algorithm : IAlgorithm
     {
-        static public double a { get; set; } = 1; //- współczynnik odbicia  a>0
-        static public double b { get; set; } = 0.5; //- współczynnik kontrakcji 0<b<1
-        static public double c { get; set; } = 0.2; //- współczynnik ekspancji c>
-        static public double epsilon { get; set; } = 1;
+        public double a { get; set; } = 1; //- współczynnik odbicia  a>0
+        public double b { get; set; } = 0.5; //- współczynnik kontrakcji 0<b<1
+        public double c { get; set; } = 0.2; //- współczynnik ekspancji c>
+        public double epsilon { get; set; } = 1;
 
         private Function function;
         private int vars_number;
@@ -33,7 +34,7 @@ namespace Simplex
             function = fn;
             limits = lm;
             vars_number = function.getArgumentsNumber();
-            tips_number = vars_number + 1;
+            tips_number = vars_number + 1;            
 
             RandPoints();
             BegginingProcedure();
@@ -47,33 +48,34 @@ namespace Simplex
         }
 
         public void RunSimplexRun()
-        {
+        {            
             h = simplex_val.IndexOf(simplex_val.Max());
             L = simplex_val.IndexOf(simplex_val.Min());
 
             Pp = CalculateCenter();
 
-            var Pstar = Reflection(simplex[h], Pp, a);
+            var Ps = Reflection(simplex[h], Pp, a);
             var Fs = function.calculate(Pp);
-            var Fo = function.calculate(Pstar);
+            var Fo = function.calculate(Ps);
 
             if (Fo < simplex_val[L])
             {
-                var Ppp = Expansion(Pstar, Pp, c);
-                var Fe = function.calculate(Ppp);
+                var Pss = Expansion(Ps, Pp, c);
+                var Fe = function.calculate(Pss);
 
                 if (Fe < simplex_val[h])
                 {
-                    simplex[h] = Ppp;
+                    simplex[h] = Pss;
                 }
                 else
                 {
-                    simplex[h] = Pp;
+                    simplex[h] = Ps;
                 }
 
                 if (isMinCondReached())
                 {
                     CalculatedSucc();
+                    return;
                 }
                 else
                 {
@@ -99,15 +101,15 @@ namespace Simplex
                 {
                     if (Fo < simplex_val[h])
                     {
-                        simplex[h] = Pp;
+                        simplex[h] = Ps;
                     }
 
-                    var Pppp = Contraction(simplex[h], Pp, b);
-                    var Fk = function.calculate(Pppp);
+                    var Psss = Contraction(simplex[h], Pp, b);
+                    var Fk = function.calculate(Psss);
 
                     if (Fk < simplex_val[h])
                     {
-                        simplex[h] = Pppp;
+                        simplex[h] = Psss;
 
                         if (isMinCondReached())
                         {
@@ -148,11 +150,12 @@ namespace Simplex
                             RunSimplexRun();
                         }
                     }
+                    
                 }
 
                 else
                 {
-                    simplex[h] = Pp;
+                    simplex[h] = Ps;
 
                     if (isMinCondReached())
                     {
@@ -210,9 +213,12 @@ namespace Simplex
             var sum = new double[vars_number];
             foreach (var p in simplex)
             {
-                for (int i = 0; i < vars_number; i++)
+                if (simplex.IndexOf(p) != h)
                 {
-                    sum[i] += p[i];
+                    for (int i = 0; i < vars_number; i++)
+                    {
+                        sum[i] += p[i];
+                    }
                 }
             }
             var tmp = new double[vars_number];
@@ -229,7 +235,7 @@ namespace Simplex
             var tmp = new double[vars_number];
             for (int i = 0; i < vars_number; i++)
             {
-                tmp[i] = (1 + s) * p1[i] - s * p2[i];
+                tmp[i] = (1 + s) * p2[i] - s * p1[i];
             }
 
             return tmp;
