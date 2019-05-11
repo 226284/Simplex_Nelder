@@ -34,6 +34,8 @@ namespace Simplex
             InitializeComponent();
 
             InitializeGUI();
+
+            Algorithm.CalculatedSucc += OnCalculatedSucc;
         }
 
         private void OnCalculatedSucc()
@@ -141,8 +143,6 @@ namespace Simplex
             if (gui_fun != null && gui_limits != null)
             {
                 alg = new Algorithm(gui_fun, gui_limits);
-
-                alg.CalculatedSucc += OnCalculatedSucc;
             }
 
             wnd_oblicz.Visibility = Visibility.Hidden;

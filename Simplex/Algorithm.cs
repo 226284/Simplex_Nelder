@@ -25,11 +25,11 @@ namespace Simplex
         private List<string> calculations;
         private List<double[]> simplex;
         private List<double> simplex_val;
-        private double[] Pp;
+        //private double[] Pp;
         private int h, L, ZW;
 
         public List<List<double[]>> points;
-        public Action CalculatedSucc;
+        static public event Action CalculatedSucc;
 
         public Algorithm(Function fn, List<Tuple<double, double>> lm)
         {
@@ -57,7 +57,7 @@ namespace Simplex
             h = simplex_val.IndexOf(simplex_val.Max());
             L = simplex_val.IndexOf(simplex_val.Min());
 
-            Pp = CalculateCenter();
+            var Pp = CalculateCenter();
 
             var Ps = Reflection(simplex[h], Pp, a);
             var Fs = function.calculate(Pp);
