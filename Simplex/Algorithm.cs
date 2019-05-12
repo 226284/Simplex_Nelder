@@ -15,7 +15,7 @@ namespace Simplex
     {
         public double a { get; set; } = 1; //- współczynnik odbicia  a>0
         public double b { get; set; } = 0.5; //- współczynnik kontrakcji 0<b<1
-        public double c { get; set; } = 0.2; //- współczynnik ekspancji c>
+        public double c { get; set; } = 0.2; //- współczynnik ekspansji c>
         public double epsilon { get; set; } = 1;
 
         private Function function;
@@ -41,7 +41,6 @@ namespace Simplex
 
             RandPoints();
             points.Add(simplex);
-            //new LayerViewModel(fn);
             BegginingProcedure();
             RunSimplexRun();
         }

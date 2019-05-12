@@ -28,6 +28,8 @@ namespace Simplex
         private Algorithm alg;
         private int tmp_vars;
 
+        public LayerViewModel layer;
+
 
         public MainWindow()
         {

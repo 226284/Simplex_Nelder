@@ -7,7 +7,9 @@
         xmlns:local="clr-namespace:Simplex"
         mc:Ignorable="d"
         Title="Layer" Height="700" Width="800">
-        
+        <Window.DataContext>
+            <local:LayerViewModel/>
+        </Window.DataContext>
     <Grid>
         <Button Content="Next Step" HorizontalAlignment="Left" Margin="684,630,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
         <Button Content="Previous Step" HorizontalAlignment="Left" Margin="25,630,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
