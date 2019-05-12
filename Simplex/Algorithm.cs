@@ -112,7 +112,10 @@ namespace Simplex
 
                     var Psss = Contraction(simplex[h], Pp, b);
                     var Fk = function.calculate(Psss);
-
+                    Debug.WriteLine("Fk = ");
+                    Debug.WriteLine(Fk);
+                    Debug.WriteLine("Ph = ");
+                    Debug.WriteLine(simplex_val[h]);
                     if (Fk < simplex_val[h])
                     {
                         simplex[h] = Psss;
@@ -300,7 +303,7 @@ namespace Simplex
                 }
                 j++;
             }
-            Debug.WriteLine(max);
+           //ebug.WriteLine(max);
             // now check if max length is smaller then the defined error
             if (max < epsilon)
             {
