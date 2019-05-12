@@ -5,10 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Simplex"
         mc:Ignorable="d"
-        Title="HelpWindow" Height="200" Width="200">
+        Title="HelpWindow" Height="400" Width="325">
     <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="34,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Postać jebanej funkcji"/><LineBreak/><Run/></TextBlock>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="53,37,0,0" TextWrapping="Wrap" Text="x^2+13y*^3" VerticalAlignment="Top" Width="120" TextChanged="TextBox_TextChanged"/>
+        <TextBlock HorizontalAlignment="Left" Margin="76,7,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Deklaracja funkcji"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="25,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="269" TextChanged="TextBox_TextChanged" Text="f(x,y) = x^2 + y^2"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="25,59,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="269" TextChanged="TextBox_TextChanged" Text="f(x,y,z) = 3*x^2 + 5*y^2 + cos(z)"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="25,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="269" TextChanged="TextBox_TextChanged" Text="f(x,y,z,t) = 2*x^2 - 3*y^2 - 3*sin(z) + 4*cos(t)"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="25,115,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="269" TextChanged="TextBox_TextChanged" Text="f(x,y,z,t,v) = -x^3 + y^2 - 4*z^3 + log(t) - exp(v)"/>
+        <TextBlock HorizontalAlignment="Left" Margin="25,151,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="1. Po wpisaniu funkcji nacisnąć 'Zatwierdź' " Width="269"/>
+        <TextBlock HorizontalAlignment="Left" Margin="25,188,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="2. Wpisać ograniczenia przedziałów zmiennych " Width="269"/>
+        <TextBlock HorizontalAlignment="Left" Margin="25,225,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="3. Zadać parametry algorytmu " Width="269"/>
+        <TextBlock HorizontalAlignment="Left" Margin="25,258,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="4. Kliknąc 'Oblicz' " Width="269"/>
+        <TextBlock HorizontalAlignment="Left" Margin="25,288,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="'Layer' służy do pokazania warstwicy dla funkcji dwóch zmiennych f(x,y) " Width="269"/>
+        <Button x:Name="button" Content="Ok" HorizontalAlignment="Left" Margin="126,341,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
 
     </Grid>
 </Window>
