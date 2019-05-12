@@ -13,10 +13,12 @@ namespace Simplex
 
     public class Algorithm : IAlgorithm
     {
-        public double a { get; set; } = 1; //- współczynnik odbicia  a>0
-        public double b { get; set; } = 0.5; //- współczynnik kontrakcji 0<b<1
-        public double c { get; set; } = 0.2; //- współczynnik ekspansji c>
-        public double epsilon { get; set; } = 1;
+        static public double a { get; set; } // - współczynnik odbicia  a>0
+        static public double b { get; set; } // - współczynnik kontrakcji 0<b<1
+        static public double c { get; set; } // - współczynnik ekspansji c>
+        static public double epsilon { get; set; } // - maksymalny błąd 
+        static public int max_licznik { get; set; } // - ilość iteracji
+
 
         private Function function;
         private int vars_number;
@@ -26,10 +28,10 @@ namespace Simplex
         private List<double[]> simplex;
         private List<double> simplex_val;
         //private double[] Pp;
-        private int h, L, ZW;
+        private int h, L, ZW, licznik;
 
         public List<List<double[]>> points;
-        static public event Action CalculatedSucc;
+        static public event Action<double[]> CalculatedSucc;
 
         public Algorithm(Function fn, List<Tuple<double, double>> lm)
         {
@@ -38,21 +40,19 @@ namespace Simplex
             vars_number = function.getArgumentsNumber();
             tips_number = vars_number + 1;
             points = new List<List<double[]>>();
+            simplex = new List<double[]>();
 
             RandPoints();
             points.Add(simplex);
-            BegginingProcedure();
             RunSimplexRun();
         }
 
-        public void BegginingProcedure()
-        {
-            simplex_val = CalculateFunction();
-            ZW = 0;
-        }
-
         public void RunSimplexRun()
-        {            
+        {
+            licznik++;
+
+            simplex_val = CalculateFunction();
+
             h = simplex_val.IndexOf(simplex_val.Max());
             L = simplex_val.IndexOf(simplex_val.Min());
 
@@ -76,17 +76,13 @@ namespace Simplex
                     simplex[h] = Ps;
                 }
 
-                if (isMinCondReached())
+                if (isMinCondReached() || licznik >= max_licznik)
                 {
-                    CalculatedSucc();
+                    CalculatedSucc(Pp);
                     return;
                 }
                 else
                 {
-                    if (ZW == 1)
-                    {
-                        BegginingProcedure();
-                    }
                     RunSimplexRun();
                 }
             }
@@ -106,7 +102,7 @@ namespace Simplex
                 {
                     if (Fo < simplex_val[h])
                     {
-                        simplex[h] = Ps;
+                        this.simplex[h] = Ps;
                     }
 
                     var Psss = Contraction(simplex[h], Pp, b);
@@ -121,14 +117,10 @@ namespace Simplex
 
                         if (isMinCondReached())
                         {
-                            CalculatedSucc();
+                            CalculatedSucc(Pp);
                         }
                         else
                         {
-                            if (ZW == 1)
-                            {
-                                BegginingProcedure();
-                            }
                             RunSimplexRun();
                         }
                     }
@@ -143,38 +135,28 @@ namespace Simplex
                             }
                         }
 
-                        ZW = 1;
-
-                        if (isMinCondReached())
+                        if (isMinCondReached() || licznik >= max_licznik)
                         {
-                            CalculatedSucc();
+                            CalculatedSucc(Pp);
                         }
                         else
                         {
-                            if (ZW == 1)
-                            {
-                                BegginingProcedure();
-                            }
                             RunSimplexRun();
                         }
                     }
-                    
+
                 }
 
                 else
                 {
                     simplex[h] = Ps;
 
-                    if (isMinCondReached())
+                    if (isMinCondReached() || licznik >= max_licznik)
                     {
-                        CalculatedSucc();
+                        CalculatedSucc(Pp);
                     }
                     else
                     {
-                        if (ZW == 1)
-                        {
-                            BegginingProcedure();
-                        }
                         RunSimplexRun();
                     }
                 }
@@ -183,8 +165,6 @@ namespace Simplex
 
         public void RandPoints()
         {
-            simplex = new List<double[]>();
-
             Random random = new Random();
             for (int t = 0; t < tips_number; t++)
             {
@@ -302,7 +282,7 @@ namespace Simplex
                 }
                 j++;
             }
-           //ebug.WriteLine(max);
+            //ebug.WriteLine(max);
             // now check if max length is smaller then the defined error
             if (max < epsilon)
             {

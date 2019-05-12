@@ -40,9 +40,17 @@ namespace Simplex
             Algorithm.CalculatedSucc += OnCalculatedSucc;
         }
 
-        private void OnCalculatedSucc()
+        private void OnCalculatedSucc(double[] obj)
         {
-            MessageBoxResult result = MessageBox.Show(this, "Obliczono pomyślnie", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+            string string_obj = "";
+            var variables = new string[] {"x1", "x2", "x3", "x4", "x5"};
+                
+            foreach (var d in obj)
+            {
+                string_obj += variables[Array.IndexOf(obj, d)] + ": [" + d.ToString() + "]" + "\n";
+            }
+
+            MessageBoxResult result = MessageBox.Show(this, "Obliczono pomyślnie:\n" + string_obj, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void InitializeGUI()
@@ -110,6 +118,51 @@ namespace Simplex
                     Double.TryParse(wnd_maxcond3.Text, out max);
                     gui_limits.Add(new Tuple<double, double>(min, max));
                 }
+
+                if (tmp_vars == 4)
+                {
+                    double min, max;
+                    Double.TryParse(wnd_mincond1.Text, out min);
+                    Double.TryParse(wnd_maxcond1.Text, out max);
+                    gui_limits.Add(new Tuple<double, double>(min, max));
+
+                    Double.TryParse(wnd_mincond2.Text, out min);
+                    Double.TryParse(wnd_maxcond2.Text, out max);
+                    gui_limits.Add(new Tuple<double, double>(min, max));
+
+                    Double.TryParse(wnd_mincond3.Text, out min);
+                    Double.TryParse(wnd_maxcond3.Text, out max);
+                    gui_limits.Add(new Tuple<double, double>(min, max));
+
+                    Double.TryParse(wnd_mincond4.Text, out min);
+                    Double.TryParse(wnd_maxcond4.Text, out max);
+                    gui_limits.Add(new Tuple<double, double>(min, max));
+                }
+
+                if (tmp_vars == 5)
+                {
+                    double min, max;
+                    Double.TryParse(wnd_mincond1.Text, out min);
+                    Double.TryParse(wnd_maxcond1.Text, out max);
+                    gui_limits.Add(new Tuple<double, double>(min, max));
+
+                    Double.TryParse(wnd_mincond2.Text, out min);
+                    Double.TryParse(wnd_maxcond2.Text, out max);
+                    gui_limits.Add(new Tuple<double, double>(min, max));
+
+                    Double.TryParse(wnd_mincond3.Text, out min);
+                    Double.TryParse(wnd_maxcond3.Text, out max);
+                    gui_limits.Add(new Tuple<double, double>(min, max));
+
+                    Double.TryParse(wnd_mincond4.Text, out min);
+                    Double.TryParse(wnd_maxcond4.Text, out max);
+                    gui_limits.Add(new Tuple<double, double>(min, max));
+
+                    Double.TryParse(wnd_mincond4.Text, out min);
+                    Double.TryParse(wnd_maxcond4.Text, out max);
+                    gui_limits.Add(new Tuple<double, double>(min, max));
+                }
+
             }
             catch (Exception ex)
             {
@@ -122,7 +175,7 @@ namespace Simplex
             // check parameters
             try
             {
-                /*double tmp;
+                double tmp;
                 Double.TryParse(this.wnd_a.Text, out tmp);
                 Algorithm.a = tmp;
                 Double.TryParse(this.wnd_b.Text, out tmp);
@@ -131,11 +184,15 @@ namespace Simplex
                 Algorithm.c = tmp;
                 Double.TryParse(this.wnd_epsilon.Text, out tmp);
                 Algorithm.epsilon = tmp;
-                */
+                int tmp2;
+                Int32.TryParse(this.wnd_iter.Text, out tmp2);
+                Algorithm.max_licznik = tmp2;
+
                 this.wnd_a.IsEnabled = false;
                 this.wnd_b.IsEnabled = false;
                 this.wnd_c.IsEnabled = false;
                 this.wnd_epsilon.IsEnabled = false;
+                this.wnd_iter.IsEnabled = false;
             }
             catch
             {
@@ -262,6 +319,7 @@ namespace Simplex
             this.wnd_b.IsEnabled = true;
             this.wnd_c.IsEnabled = true;
             this.wnd_epsilon.IsEnabled = true;
+            this.wnd_iter.IsEnabled = true;
         }
 
         private void HideAllConditions()
