@@ -1,4 +1,5 @@
 ﻿using org.mariuszgromada.math.mxparser;
+using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -27,6 +28,7 @@ namespace Simplex
         private List<Tuple<double, double>> gui_limits;
         private Algorithm alg;
         private int tmp_vars;
+        private bool calc_active_flag = false;
 
         public LayerViewModel layer;
 
@@ -43,14 +45,22 @@ namespace Simplex
         private void OnCalculatedSucc(double[] obj)
         {
             string string_obj = "";
-            var variables = new string[] {"x1", "x2", "x3", "x4", "x5"};
-                
+            var variables = new string[] { "x1", "x2", "x3", "x4", "x5" };
+
             foreach (var d in obj)
             {
                 string_obj += variables[Array.IndexOf(obj, d)] + ": [" + d.ToString() + "]" + "\n";
             }
 
             MessageBoxResult result = MessageBox.Show(this, "Obliczono pomyślnie:\n" + string_obj, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            if (alg != null)
+            {
+                foreach (var s in alg.calculations)
+                {
+                    wnd_debug.Text = wnd_debug.Text + s +"\n";
+                }
+            }
         }
 
         private void InitializeGUI()
@@ -65,6 +75,7 @@ namespace Simplex
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            LayerViewModel.MyModel.Series.Add(new FunctionSeries(Math.Sin, 0, 10, 0.1, "sin(x)"));
             Layer wnd = new Layer();
             wnd.Show();
         }
@@ -202,10 +213,12 @@ namespace Simplex
             if (gui_fun != null && gui_limits != null)
             {
                 alg = new Algorithm(gui_fun, gui_limits);
+                alg.Initialize();
             }
 
             wnd_oblicz.Visibility = Visibility.Hidden;
             wnd_restart.Visibility = Visibility.Visible;
+            calc_active_flag = true;
         }
 
         private void Wnd_fun_KeyDown(object sender, KeyEventArgs e)
@@ -305,6 +318,11 @@ namespace Simplex
                 Debug.WriteLine(ex);
                 return;
             }
+
+            if (calc_active_flag == true)
+            {
+                Wnd_restart_Click(new object(), new RoutedEventArgs());
+            }
         }
 
         private void Wnd_restart_Click(object sender, RoutedEventArgs e)
@@ -312,7 +330,7 @@ namespace Simplex
             wnd_oblicz.Visibility = Visibility.Visible;
             wnd_restart.Visibility = Visibility.Hidden;
 
-            HideAllConditions();
+            //HideAllConditions();
             EnableAllConditions();
 
             this.wnd_a.IsEnabled = true;
@@ -320,6 +338,8 @@ namespace Simplex
             this.wnd_c.IsEnabled = true;
             this.wnd_epsilon.IsEnabled = true;
             this.wnd_iter.IsEnabled = true;
+
+            this.wnd_debug.Text = "";
         }
 
         private void HideAllConditions()

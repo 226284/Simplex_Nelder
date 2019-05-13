@@ -14,7 +14,7 @@
         <Button Content="Next Step" HorizontalAlignment="Left" Margin="684,630,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
         <Button Content="Previous Step" HorizontalAlignment="Left" Margin="25,630,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="600" Margin="25,10,0,0" VerticalAlignment="Top" Width="734">
-            <oxy:PlotView Model="{Binding MyModel}"/>
+            <oxy:PlotView x:Name="layer_wnd_plot" Model="{Binding MyModel}"/>
         </Border>
 
     </Grid>

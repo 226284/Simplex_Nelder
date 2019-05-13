@@ -16,10 +16,10 @@ namespace Simplex
     {
         public LayerViewModel()
         {
-            this.MyModel = new Plot { Title = "Plot1" };
+            MyModel = new PlotModel { Title = "Plot1" };
 
             // Color axis (the X and Y axes are generated automatically)
-            this.MyModel.Axes.Add(new OxyPlot.Wpf.LinearColorAxis());
+            //this.MyModel.Axes.Add(new OxyPlot.Wpf.LinearColorAxis());
             /*
             // generate 1d normal distribution
             var singleData = new double[100];
@@ -53,7 +53,7 @@ namespace Simplex
             //this.MyModel
         }
 
-        public Plot MyModel { get; private set; }
+        static public PlotModel MyModel { get; private set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

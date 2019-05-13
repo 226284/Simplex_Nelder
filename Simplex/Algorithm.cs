@@ -19,12 +19,11 @@ namespace Simplex
         static public double epsilon { get; set; } // - maksymalny błąd 
         static public int max_licznik { get; set; } // - ilość iteracji
 
-
+        public List<string> calculations;
         private Function function;
         private int vars_number;
         private int tips_number;
         private List<Tuple<double, double>> limits;
-        private List<string> calculations;
         private List<double[]> simplex;
         private List<double> simplex_val;
         //private double[] Pp;
@@ -41,7 +40,11 @@ namespace Simplex
             tips_number = vars_number + 1;
             points = new List<List<double[]>>();
             simplex = new List<double[]>();
+            calculations = new List<string>();
+        }
 
+        public void Initialize()
+        {
             RandPoints();
             points.Add(simplex);
             RunSimplexRun();
@@ -57,6 +60,8 @@ namespace Simplex
             L = simplex_val.IndexOf(simplex_val.Min());
 
             var Pp = CalculateCenter();
+
+            calculations.Add(UpdateString(licznik, simplex, Pp, function.calculate(Pp)));
 
             var Ps = Reflection(simplex[h], Pp, a);
             var Fs = function.calculate(Pp);
@@ -91,7 +96,7 @@ namespace Simplex
                 bool break_f = false;
                 for (int i = 0; i < tips_number; i++)
                 {
-                    if (Fo > simplex_val[i] && i != h) // za wyjątkiem *f(Ph)
+                    if (Fo > simplex_val[i] && i != h)
                     {
                         break_f = true;
                         break;
@@ -107,10 +112,7 @@ namespace Simplex
 
                     var Psss = Contraction(simplex[h], Pp, b);
                     var Fk = function.calculate(Psss);
-                    Debug.WriteLine("Fk = ");
-                    Debug.WriteLine(Fk);
-                    Debug.WriteLine("Ph = ");
-                    Debug.WriteLine(simplex_val[h]);
+
                     if (Fk < simplex_val[h])
                     {
                         simplex[h] = Psss;
@@ -290,6 +292,32 @@ namespace Simplex
             }
 
             return false;
+        }
+
+        private string UpdateString(int iter, List<double[]> points, double[] center, double val)
+        {
+            string string_obj = "----------ITERACJA: " + iter + "----------\n";
+            var variables = new string[] { "x1", "x2", "x3", "x4", "x5" };
+
+            string_obj += "Wierzchołki simpleksu:\n";
+            foreach (var p in points)
+            {
+                string_obj += points.IndexOf(p).ToString() + ") \n";
+                foreach (var d in p)
+                {
+                    string_obj += "  " + variables[Array.IndexOf(p, d)] + ": [" + d.ToString() + "]" + "\n";
+                }
+            }
+
+            string_obj += "\nŚrodek symetrii w punkcie:\n";
+            foreach (var d in center)
+            {
+                string_obj += "  " + variables[Array.IndexOf(center, d)] + ": [" + d.ToString() + "]" + "\n";
+            }
+
+            string_obj += "\nWartość funkcji w środku:\n  " + val.ToString() + "\n";
+
+            return string_obj;
         }
     }
 }
