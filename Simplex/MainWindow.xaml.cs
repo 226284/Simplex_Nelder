@@ -29,6 +29,7 @@ namespace Simplex
         private Algorithm alg;
         private int tmp_vars;
         private bool calc_active_flag = false;
+        private int debug_index = -1;
 
         public LayerViewModel layer;
 
@@ -58,9 +59,10 @@ namespace Simplex
             {
                 foreach (var s in alg.calculations)
                 {
-                    wnd_debug.Text = wnd_debug.Text + s +"\n";
+                    wnd_debug.Text = wnd_debug.Text + s + "\n";
                 }
             }
+            debug_index = -1;
         }
 
         private void InitializeGUI()
@@ -340,6 +342,7 @@ namespace Simplex
             this.wnd_iter.IsEnabled = true;
 
             this.wnd_debug.Text = "";
+            debug_index = -1;
         }
 
         private void HideAllConditions()
@@ -397,6 +400,51 @@ namespace Simplex
             wnd_maxcond5.IsEnabled = true;
             wnd_mincond5.IsEnabled = true;
             wnd_varcond5.IsEnabled = true;
+        }
+
+        private void NextButtonClicked(object sender, RoutedEventArgs e)
+        {
+            if (alg != null)
+            {
+                if (debug_index == -1)
+                {
+                    wnd_debug.Text = alg.calculations.First();
+                    debug_index = 0;
+                }
+                else if (debug_index < alg.calculations.Count - 1)
+                {
+                    wnd_debug.Text = alg.calculations[++debug_index];
+                }
+            }
+        }
+
+        private void RevertButtonClicked(object sender, RoutedEventArgs e)
+        {
+            if (alg != null)
+            {
+                wnd_debug.Text = "";
+                foreach (var s in alg.calculations)
+                {
+                    wnd_debug.Text = wnd_debug.Text + s + "\n";
+                }
+                debug_index = -1;
+            }
+        }
+
+        private void PreviousButtonClicked(object sender, RoutedEventArgs e)
+        {
+            if (alg != null)
+            {
+                if (debug_index == -1)
+                {
+                    wnd_debug.Text = alg.calculations.Last();
+                    debug_index = alg.calculations.Count - 1;
+                }
+                else if (debug_index > 0)
+                {
+                    wnd_debug.Text = alg.calculations[--debug_index];
+                }
+            }
         }
     }
 }
