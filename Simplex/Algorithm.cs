@@ -45,6 +45,7 @@ namespace Simplex
 
         public void Initialize()
         {
+            calculations.Clear();
             RandPoints();
             points.Add(simplex);
             RunSimplexRun();
@@ -61,7 +62,8 @@ namespace Simplex
 
             var Pp = CalculateCenter();
 
-            calculations.Add(UpdateString(licznik, simplex, Pp, function.calculate(Pp)));
+            //calculations.Add(UpdateString(licznik, simplex, simplex[h], function.calculate(Pp)));
+            calculations.Add(UpdateString(licznik, simplex, simplex[L], simplex_val[L]));
 
             var Ps = Reflection(simplex[h], Pp, a);
             var Fs = function.calculate(Pp);
@@ -309,13 +311,16 @@ namespace Simplex
                 }
             }
 
-            string_obj += "\nŚrodek symetrii w punkcie:\n";
+            //string_obj += "\nŚrodek symetrii w punkcie:\n";
+            string_obj += "\nMin wartość dla wierzchołka:\n";
+
             foreach (var d in center)
             {
                 string_obj += "  " + variables[Array.IndexOf(center, d)] + ": [" + d.ToString() + "]" + "\n";
             }
 
-            string_obj += "\nWartość funkcji w środku:\n  " + val.ToString() + "\n";
+            //string_obj += "\nWartość funkcji w środku:\n  " + val.ToString() + "\n";
+            string_obj += "\nWartość funkcji w min:\n  " + val.ToString() + "\n";
 
             return string_obj;
         }
