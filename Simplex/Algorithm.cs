@@ -18,6 +18,7 @@ namespace Simplex
         static public double c { get; set; } // - współczynnik ekspansji c>
         static public double epsilon { get; set; } // - maksymalny błąd 
         static public int max_licznik { get; set; } // - ilość iteracji
+        static public string precision { get; set; } = "F4";
 
         public List<string> calculations;
         private Function function;
@@ -307,7 +308,7 @@ namespace Simplex
                 string_obj += points.IndexOf(p).ToString() + ") \n";
                 foreach (var d in p)
                 {
-                    string_obj += "  " + variables[Array.IndexOf(p, d)] + ": [" + d.ToString() + "]" + "\n";
+                    string_obj += "  " + variables[Array.IndexOf(p, d)] + ": [" + d.ToString(precision) + "]" + "\n";
                 }
             }
 
@@ -316,11 +317,11 @@ namespace Simplex
 
             foreach (var d in center)
             {
-                string_obj += "  " + variables[Array.IndexOf(center, d)] + ": [" + d.ToString() + "]" + "\n";
+                string_obj += "  " + variables[Array.IndexOf(center, d)] + ": [" + d.ToString(precision) + "]" + "\n";
             }
 
             //string_obj += "\nWartość funkcji w środku:\n  " + val.ToString() + "\n";
-            string_obj += "\nWartość funkcji w min:\n  " + val.ToString() + "\n";
+            string_obj += "\nWartość funkcji w min:\n  " + val.ToString(precision) + "\n";
 
             return string_obj;
         }

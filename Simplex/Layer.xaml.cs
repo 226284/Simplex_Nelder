@@ -21,6 +21,8 @@ namespace Simplex
     /// </summary>
     public partial class Layer : Window
     {
+        private PlotViewModel _PlotViewModel;
+       
         public Layer()
         {
             InitializeComponent();
@@ -28,6 +30,10 @@ namespace Simplex
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            //PlotViewModel.Plot = new OxyPlot.PlotModel() { Title = "Testowy" };
+            //PlotViewModel.Plot.Series.Add(new FunctionSeries(Math.Cos, 0, 10, 0.1, "cos(x)"));
+
+            //this.layer_wnd_plot.InvalidatePlot(true);
         }
     }
 }

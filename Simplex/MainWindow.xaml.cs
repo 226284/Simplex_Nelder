@@ -31,7 +31,7 @@ namespace Simplex
         private bool calc_active_flag = false;
         private int debug_index = -1;
 
-        public LayerViewModel layer;
+        public PlotViewModel layer;
 
 
         public MainWindow()
@@ -77,9 +77,11 @@ namespace Simplex
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            LayerViewModel.MyModel.Series.Add(new FunctionSeries(Math.Sin, 0, 10, 0.1, "sin(x)"));
-            Layer wnd = new Layer();
-            wnd.Show();
+            var lyr = new Layer();
+            lyr.Show();
+
+            var window = new Window1();
+            window.Show();
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
