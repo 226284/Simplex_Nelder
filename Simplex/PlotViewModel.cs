@@ -15,33 +15,32 @@ using LineSeries = OxyPlot.Series.LineSeries;
 
 namespace Simplex
 {
-    public class PlotViewModel : INotifyPropertyChanged
+    public class PlotViewModel : ViewModelBase
     {
-
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
-        protected void OnPropertyChanged(PropertyChangedEventArgs e)
+        private PlotModel _scatterModel;
+        public PlotModel ScatterModel
         {
-            PropertyChanged(this, e);
-        }
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-        }
-
-
-        private PlotModel _plot { get; set; }
-
-        public PlotModel Plot
-        {
-            get { return _plot; }
+            get { return _scatterModel; }
             set
             {
-                _plot = value;
-                this.OnPropertyChanged();
+                if (value != _scatterModel)
+                {
+                    _scatterModel = value;
+                    OnPropertyChanged();
+                }
             }
         }
-        //this.MyModel = new PlotModel { Title = "Example 1" };
-        // this.MyModel.Series.Add(new FunctionSeries(Math.Cos, 0, 10, 0.1, "cos(x)"));
+    }
+
+    public class ViewModelBase : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] String propName = null)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propName));
+        }
     }
 }
+

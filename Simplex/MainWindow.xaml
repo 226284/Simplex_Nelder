@@ -4,8 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Simplex"
+        xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="480" Width="630">
+        Title="MainWindow" Height="480" Width="1000">
+    <Window.DataContext>
+        <local:PlotViewModel/>
+    </Window.DataContext>
     <Grid>
         <Button x:Name="wnd_oblicz" Content="Oblicz" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="509,30,0,0" Height="22" Click="Button_Click_3"/>
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="330" Margin="45,60,0,0" VerticalAlignment="Top" Width="361">
@@ -36,7 +40,7 @@
         <Button Content="Następny" HorizontalAlignment="Left" Margin="125,411,0,0" VerticalAlignment="Top" Width="75" Click="NextButtonClicked"/>
         <Button Content="Przywroć" HorizontalAlignment="Left" Margin="331,411,0,0" VerticalAlignment="Top" Width="75" Click="RevertButtonClicked"/>
         <Button Content="Poprzedni" HorizontalAlignment="Left" Margin="45,411,0,0" VerticalAlignment="Top" Width="75" Click="PreviousButtonClicked"/>
-        <Button Content="Show Layer" IsEnabled="true" HorizontalAlignment="Left" Margin="509,411,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
+        <Button x:Name="wnd_btn_showlayer" Content="Show Layer" IsEnabled="false" HorizontalAlignment="Left" Margin="509,411,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
         <Button Content="Pomoc" HorizontalAlignment="Left" Margin="426,411,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_2"/>
         <GroupBox Header="Warunki brzegowe" HorizontalAlignment="Left" Height="186" Margin="426,60,0,0" VerticalAlignment="Top" Width="158"/>
         <Button Content="Zatwierdź" HorizontalAlignment="Left" VerticalAlignment="Top" Width="65" Margin="411,30,0,0" Height="22" Click="Button_Click_4"/>
@@ -53,6 +57,7 @@
         <Button x:Name="wnd_restart" Visibility="Hidden" Content="Restart" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="509,30,0,0" Height="22" Click="Wnd_restart_Click"/>
         <Label Content="Ilość iteracji" HorizontalAlignment="Left" Margin="480,373,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="wnd_iter" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="20" Margin="435,375,0,0" TextWrapping="Wrap" Text="50" VerticalAlignment="Top" Width="40"/>
+        <oxy:PlotView x:Name="plot1" Model="{Binding ScatterModel}"  Margin="634,60,28.6,60.4"/>
 
     </Grid>
 </Window>

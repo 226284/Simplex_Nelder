@@ -1,7 +1,10 @@
 ﻿using org.mariuszgromada.math.mxparser;
+using OxyPlot;
+using OxyPlot.Axes;
 using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -31,8 +34,11 @@ namespace Simplex
         private bool calc_active_flag = false;
         private int debug_index = -1;
 
-        public PlotViewModel layer;
-
+        public PlotViewModel PlotViewModel
+        {
+            get { return (PlotViewModel)DataContext; }
+        }
+        public PlotModel ScatterModel { get; set; }
 
         public MainWindow()
         {
@@ -67,6 +73,8 @@ namespace Simplex
 
         private void InitializeGUI()
         {
+            ScatterModel = new PlotModel();
+
             HideAllConditions();
         }
 
@@ -77,11 +85,64 @@ namespace Simplex
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            var lyr = new Layer();
-            lyr.Show();
+            //var lyr = new Layer();
+            //lyr.Show();
 
-            var window = new Window1();
-            window.Show();
+            //var s2 = new LineSeries
+            //{
+            //    StrokeThickness = 1,
+            //    MarkerSize = 1,
+            //    MarkerStroke = OxyColors.ForestGreen,
+            //    MarkerType = MarkerType.Plus
+            //};
+
+            //for (int i = 0; i < 100; i++)
+            //{
+            //    s2.Points.Add(new DataPoint(i, i));
+            //}
+            //ScatterModel.Series.Add(s2);
+            //ScatterModel.Series.Add(new FunctionSeries(Math.Sin, 0, 10, 0.1, gui_fun.getDescription()));
+            //PlotViewModel.ScatterModel = ScatterModel;
+            ScatterModel = new PlotModel();
+
+            ScatterModel.Axes.Add(new LinearColorAxis
+            {
+                Palette = OxyPalettes.Rainbow(100),
+                IsAxisVisible = false
+            });
+
+            double x0 = gui_limits[0].Item1;
+            double x1 = gui_limits[0].Item2;
+            double y0 = gui_limits[1].Item1;
+            double y1 = gui_limits[1].Item2;
+
+
+            Func<double, double, double> peaks = (x, y) => gui_fun.calculate(x, y);
+            var xx = ArrayBuilder.CreateVector(x0, x1, 100);
+            var yy = ArrayBuilder.CreateVector(y0, y1, 100);
+            var peaksData = ArrayBuilder.Evaluate(peaks, xx, yy);
+
+            var heatMapSeries = new HeatMapSeries
+            {
+                Data = peaksData,
+                X0 = x0,
+                X1 = x1,
+                Y0 = y0,
+                Y1 = y1
+            };
+
+            var cs = new ContourSeries
+            {
+                Color = OxyColors.Black,
+                //LabelBackground = OxyColors.White,
+                ColumnCoordinates = yy,
+                RowCoordinates = xx,
+                Data = peaksData
+            };
+            ScatterModel.Series.Add(heatMapSeries);
+            ScatterModel.Series.Add(cs);
+            PlotViewModel.ScatterModel = null;
+            PlotViewModel.ScatterModel = ScatterModel;
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -108,80 +169,41 @@ namespace Simplex
             {
                 if (tmp_vars == 2)
                 {
-                    double min, max;
-                    Double.TryParse(wnd_mincond1.Text, out min);
-                    Double.TryParse(wnd_maxcond1.Text, out max);
-                    gui_limits.Add(new Tuple<double, double>(min, max));
+                    gui_limits.Add(new Tuple<double, double>(Double.Parse(wnd_mincond1.Text), Double.Parse(wnd_maxcond1.Text)));
+                    gui_limits.Add(new Tuple<double, double>(Double.Parse(wnd_mincond2.Text), Double.Parse(wnd_maxcond2.Text)));
 
-                    Double.TryParse(wnd_mincond2.Text, out min);
-                    Double.TryParse(wnd_maxcond2.Text, out max);
-                    gui_limits.Add(new Tuple<double, double>(min, max));
+                    this.wnd_btn_showlayer.IsEnabled = true;
                 }
 
                 if (tmp_vars == 3)
                 {
-                    double min, max;
-                    Double.TryParse(wnd_mincond1.Text, out min);
-                    Double.TryParse(wnd_maxcond1.Text, out max);
-                    gui_limits.Add(new Tuple<double, double>(min, max));
-
-                    Double.TryParse(wnd_mincond2.Text, out min);
-                    Double.TryParse(wnd_maxcond2.Text, out max);
-                    gui_limits.Add(new Tuple<double, double>(min, max));
-
-                    Double.TryParse(wnd_mincond3.Text, out min);
-                    Double.TryParse(wnd_maxcond3.Text, out max);
-                    gui_limits.Add(new Tuple<double, double>(min, max));
+                    gui_limits.Add(new Tuple<double, double>(Double.Parse(wnd_mincond1.Text), Double.Parse(wnd_maxcond1.Text)));
+                    gui_limits.Add(new Tuple<double, double>(Double.Parse(wnd_mincond2.Text), Double.Parse(wnd_maxcond2.Text)));
+                    gui_limits.Add(new Tuple<double, double>(Double.Parse(wnd_mincond3.Text), Double.Parse(wnd_maxcond3.Text)));
                 }
 
                 if (tmp_vars == 4)
                 {
-                    double min, max;
-                    Double.TryParse(wnd_mincond1.Text, out min);
-                    Double.TryParse(wnd_maxcond1.Text, out max);
-                    gui_limits.Add(new Tuple<double, double>(min, max));
-
-                    Double.TryParse(wnd_mincond2.Text, out min);
-                    Double.TryParse(wnd_maxcond2.Text, out max);
-                    gui_limits.Add(new Tuple<double, double>(min, max));
-
-                    Double.TryParse(wnd_mincond3.Text, out min);
-                    Double.TryParse(wnd_maxcond3.Text, out max);
-                    gui_limits.Add(new Tuple<double, double>(min, max));
-
-                    Double.TryParse(wnd_mincond4.Text, out min);
-                    Double.TryParse(wnd_maxcond4.Text, out max);
-                    gui_limits.Add(new Tuple<double, double>(min, max));
+                    gui_limits.Add(new Tuple<double, double>(Double.Parse(wnd_mincond1.Text), Double.Parse(wnd_maxcond1.Text)));
+                    gui_limits.Add(new Tuple<double, double>(Double.Parse(wnd_mincond2.Text), Double.Parse(wnd_maxcond2.Text)));
+                    gui_limits.Add(new Tuple<double, double>(Double.Parse(wnd_mincond3.Text), Double.Parse(wnd_maxcond3.Text)));
+                    gui_limits.Add(new Tuple<double, double>(Double.Parse(wnd_mincond4.Text), Double.Parse(wnd_maxcond4.Text)));
                 }
 
                 if (tmp_vars == 5)
                 {
-                    double min, max;
-                    Double.TryParse(wnd_mincond1.Text, out min);
-                    Double.TryParse(wnd_maxcond1.Text, out max);
-                    gui_limits.Add(new Tuple<double, double>(min, max));
-
-                    Double.TryParse(wnd_mincond2.Text, out min);
-                    Double.TryParse(wnd_maxcond2.Text, out max);
-                    gui_limits.Add(new Tuple<double, double>(min, max));
-
-                    Double.TryParse(wnd_mincond3.Text, out min);
-                    Double.TryParse(wnd_maxcond3.Text, out max);
-                    gui_limits.Add(new Tuple<double, double>(min, max));
-
-                    Double.TryParse(wnd_mincond4.Text, out min);
-                    Double.TryParse(wnd_maxcond4.Text, out max);
-                    gui_limits.Add(new Tuple<double, double>(min, max));
-
-                    Double.TryParse(wnd_mincond4.Text, out min);
-                    Double.TryParse(wnd_maxcond4.Text, out max);
-                    gui_limits.Add(new Tuple<double, double>(min, max));
+                    gui_limits.Add(new Tuple<double, double>(Double.Parse(wnd_mincond1.Text), Double.Parse(wnd_maxcond1.Text)));
+                    gui_limits.Add(new Tuple<double, double>(Double.Parse(wnd_mincond2.Text), Double.Parse(wnd_maxcond2.Text)));
+                    gui_limits.Add(new Tuple<double, double>(Double.Parse(wnd_mincond3.Text), Double.Parse(wnd_maxcond3.Text)));
+                    gui_limits.Add(new Tuple<double, double>(Double.Parse(wnd_mincond4.Text), Double.Parse(wnd_maxcond4.Text)));
+                    gui_limits.Add(new Tuple<double, double>(Double.Parse(wnd_mincond5.Text), Double.Parse(wnd_maxcond5.Text)));
                 }
 
             }
-            catch (Exception ex)
+            catch
             {
-                Debug.WriteLine("Incorrect limits");
+                MessageBoxResult result = MessageBox.Show(this, "Nieprawidłowe warunki brzegowe!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.wnd_btn_showlayer.IsEnabled = false;
                 return;
             }
 
@@ -190,18 +212,12 @@ namespace Simplex
             // check parameters
             try
             {
-                double tmp;
-                Double.TryParse(this.wnd_a.Text, out tmp);
-                Algorithm.a = tmp;
-                Double.TryParse(this.wnd_b.Text, out tmp);
-                Algorithm.b = tmp;
-                Double.TryParse(this.wnd_c.Text, out tmp);
-                Algorithm.c = tmp;
-                Double.TryParse(this.wnd_epsilon.Text, out tmp);
-                Algorithm.epsilon = tmp;
-                int tmp2;
-                Int32.TryParse(this.wnd_iter.Text, out tmp2);
-                Algorithm.max_licznik = tmp2;
+                Algorithm.a = Double.Parse(this.wnd_a.Text);
+                Algorithm.b = Double.Parse(this.wnd_b.Text);
+                Algorithm.c = Double.Parse(this.wnd_c.Text);
+                Algorithm.epsilon = Double.Parse(this.wnd_epsilon.Text);
+                Algorithm.c = Double.Parse(this.wnd_c.Text);
+                Algorithm.max_licznik = Int32.Parse(this.wnd_iter.Text);
 
                 this.wnd_a.IsEnabled = false;
                 this.wnd_b.IsEnabled = false;
@@ -211,7 +227,10 @@ namespace Simplex
             }
             catch
             {
-                throw new Exception("Incorrect Parameters");
+                MessageBoxResult result = MessageBox.Show(this, "Nieprawidłowe parametry!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                EnableAllConditions();
+                this.wnd_btn_showlayer.IsEnabled = false;
+                return;
             }
 
             if (gui_fun != null && gui_limits != null)
@@ -342,9 +361,11 @@ namespace Simplex
             this.wnd_c.IsEnabled = true;
             this.wnd_epsilon.IsEnabled = true;
             this.wnd_iter.IsEnabled = true;
-
+            this.wnd_btn_showlayer.IsEnabled = false;
             this.wnd_debug.Text = "";
             debug_index = -1;
+
+            PlotViewModel.ScatterModel = null;
         }
 
         private void HideAllConditions()
