@@ -19,6 +19,7 @@ namespace Simplex
         static public double epsilon { get; set; } // - maksymalny błąd 
         static public int max_licznik { get; set; } // - ilość iteracji
         static public string precision { get; set; } = "F4";
+        public bool isTwoDimProb { get; set; }
 
         public List<string> calculations;
         public List<List<double[]>> simplex_points;
@@ -29,7 +30,7 @@ namespace Simplex
         private List<double[]> simplex;
         private List<double> simplex_val;
         //private double[] Pp;
-        private int h, L, ZW, licznik;
+        private int h, L, licznik;
 
         static public event Action<double[]> CalculatedSucc;
 
@@ -64,8 +65,12 @@ namespace Simplex
 
             //calculations.Add(UpdateString(licznik, simplex, simplex[h], function.calculate(Pp)));
             calculations.Add(UpdateString(licznik, simplex, simplex[L], simplex_val[L]));
-            List<double[]> copy = new List<double[]>(simplex);
-            simplex_points.Add(copy);
+
+            if (isTwoDimProb)
+            {
+                List<double[]> copy = new List<double[]>(simplex);
+                simplex_points.Add(copy);
+            }
 
             var Ps = Reflection(simplex[h], Pp, a);
             var Fs = function.calculate(Pp);

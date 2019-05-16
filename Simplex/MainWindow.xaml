@@ -16,7 +16,7 @@
             <TextBox x:Name="wnd_debug" TextWrapping="Wrap" Text="" VerticalScrollBarVisibility="Visible" IsReadOnly="True"/>
         </Border>
         <TextBlock HorizontalAlignment="Left" Margin="45,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="96" Height="19"><Run Text="Funkcja:"/><LineBreak/><Run/></TextBlock>
-        <TextBox x:Name="wnd_fun" HorizontalAlignment="Left" Height="23" Margin="45,30,0,0" TextWrapping="Wrap" Text="f(x,y)=x+y" VerticalAlignment="Top" Width="361" KeyDown="Wnd_fun_KeyDown"/>
+        <TextBox x:Name="wnd_fun" HorizontalAlignment="Left" Height="23" Margin="45,30,0,0" TextWrapping="Wrap" Text="f(x,y)=x^2+y^2" VerticalAlignment="Top" Width="361" KeyDown="Wnd_fun_KeyDown"/>
 
         <TextBox x:Name="wnd_mincond1" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="442,90,0,0" TextWrapping="WrapWithOverflow" Text="-10" VerticalAlignment="Top" Width="34"/>
         <TextBox x:Name="wnd_maxcond1" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="529,90,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="34"/>

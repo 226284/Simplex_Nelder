@@ -70,8 +70,13 @@ namespace Simplex
                 {
                     wnd_debug.Text = wnd_debug.Text + s + "\n";
                 }
+
+                if (alg.isTwoDimProb)
+                {
+                    this.wnd_sym_button.IsEnabled = true;
+                    this.wnd_btn_showlayer.IsEnabled = true;
+                }
             }
-            this.wnd_sym_button.IsEnabled = true;
             debug_index = -1;
         }
 
@@ -136,6 +141,10 @@ namespace Simplex
         {
             if (alg != null)
             {
+                if(ScatterModel == null)
+                {
+                    ScatterModel = new PlotModel();
+                }
                 LineSeries lineSeries1 = new LineSeries();
                 var points = alg.simplex_points[debug_index];
                 foreach (var p in points)
@@ -143,10 +152,7 @@ namespace Simplex
                     lineSeries1.Points.Add(new DataPoint(p[0], p[1]));
                 }
                 lineSeries1.Points.Add(new DataPoint(points.First()[0], points.First()[1]));
-                //lineSeries1.Points.Add(new DataPoint(-2, -2));
-                //lineSeries1.Points.Add(new DataPoint(-5, 5));
 
-                //  ScatterModel = new PlotModel();
                 ScatterModel.Series.Add(lineSeries1);
                 PlotViewModel.ScatterModel = ScatterModel;
                 ScatterModel.InvalidatePlot(true);
@@ -179,8 +185,6 @@ namespace Simplex
                 {
                     gui_limits.Add(new Tuple<double, double>(Double.Parse(wnd_mincond1.Text), Double.Parse(wnd_maxcond1.Text)));
                     gui_limits.Add(new Tuple<double, double>(Double.Parse(wnd_mincond2.Text), Double.Parse(wnd_maxcond2.Text)));
-
-                    this.wnd_btn_showlayer.IsEnabled = true;
                 }
 
                 if (tmp_vars == 3)
@@ -211,7 +215,6 @@ namespace Simplex
             catch
             {
                 MessageBoxResult result = MessageBox.Show(this, "Nieprawidłowe warunki brzegowe!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                this.wnd_btn_showlayer.IsEnabled = false;
                 return;
             }
 
@@ -237,13 +240,13 @@ namespace Simplex
             {
                 MessageBoxResult result = MessageBox.Show(this, "Nieprawidłowe parametry!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 EnableAllConditions();
-                this.wnd_btn_showlayer.IsEnabled = false;
                 return;
             }
 
             if (gui_fun != null && gui_limits != null)
             {
                 alg = new Algorithm(gui_fun, gui_limits);
+                if (tmp_vars == 2) { alg.isTwoDimProb = true; };
                 alg.Initialize();
             }
 
@@ -372,6 +375,7 @@ namespace Simplex
             this.wnd_epsilon.IsEnabled = true;
             this.wnd_iter.IsEnabled = true;
             this.wnd_btn_showlayer.IsEnabled = false;
+            this.wnd_sym_button.IsEnabled = false;
             this.wnd_debug.Text = "";
             debug_index = -1;
 
@@ -448,12 +452,18 @@ namespace Simplex
                 {
                     wnd_debug.Text = alg.calculations.First();
                     debug_index = 0;
-                    UpdateChart();
+                    if (alg.isTwoDimProb)
+                    {
+                        UpdateChart();
+                    }
                 }
                 else if (debug_index < alg.calculations.Count - 1)
                 {
                     wnd_debug.Text = alg.calculations[++debug_index];
-                    UpdateChart();
+                    if (alg.isTwoDimProb)
+                    {
+                        UpdateChart();
+                    }
                 }
                 else
                 {
@@ -477,12 +487,18 @@ namespace Simplex
                 }
                 debug_index = -1;
 
-                if (timer != null)
+                if (alg.isTwoDimProb)
                 {
-                    timer.Stop();
-                    timer = null;
+                    if (timer != null)
+                    {
+                        timer.Stop();
+                        timer = null;
+                    }
+                    ScatterModel = null;
+                    PlotViewModel.ScatterModel = null;
+                    this.wnd_sym_button.IsEnabled = true;
+                    this.wnd_btn_showlayer.IsEnabled = true;
                 }
-                this.wnd_sym_button.IsEnabled = true;
             }
         }
 
@@ -504,10 +520,12 @@ namespace Simplex
 
         private void StartSimButton(object sender, RoutedEventArgs e)
         {
-            if (alg != null && calc_active_flag == true)
+            if (alg != null && calc_active_flag == true && alg.isTwoDimProb)
             {
                 this.wnd_sym_button.IsEnabled = false;
+                this.wnd_btn_showlayer.IsEnabled = false;
                 timer = new Timer(1000);
+                timer.AutoReset = false;
                 timer.Elapsed += OnTimerElapsed;
                 timer.Start();
             }
@@ -515,10 +533,21 @@ namespace Simplex
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)
         {
-            Dispatcher.Invoke(() =>
+            try
             {
-                NextButtonClicked(sender, new RoutedEventArgs());
-            });
+                Dispatcher.Invoke(() =>
+                {
+                    NextButtonClicked(sender, new RoutedEventArgs());
+                });
+            }
+            finally
+            {
+                if (timer != null)
+                {
+                    timer.Enabled = true;
+                }
+            }
+            
         }
     }
 }
