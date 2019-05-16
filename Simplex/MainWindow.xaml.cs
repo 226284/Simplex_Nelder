@@ -448,6 +448,7 @@ namespace Simplex
                 {
                     wnd_debug.Text = alg.calculations.First();
                     debug_index = 0;
+                    UpdateChart();
                 }
                 else if (debug_index < alg.calculations.Count - 1)
                 {
