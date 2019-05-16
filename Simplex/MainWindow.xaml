@@ -37,7 +37,7 @@
         <TextBox x:Name="wnd_mincond5" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="442,210,0,0" TextWrapping="Wrap" Text="-10" VerticalAlignment="Top" Width="34"/>
         <TextBox x:Name="wnd_maxcond5" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="529,210,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="34"/>
         <TextBlock  x:Name="wnd_varcond5" Visibility="Visible" HorizontalAlignment="Left" Margin="484,210,0,0" TextWrapping="Wrap" Text="&lt; x5 &lt;" VerticalAlignment="Top"/>
-        <Button Content="Następny" HorizontalAlignment="Left" Margin="125,411,0,0" VerticalAlignment="Top" Width="75" Click="NextButtonClicked"/>
+        <Button x:Name="wnd_btn_next" Content="Następny" HorizontalAlignment="Left" Margin="125,411,0,0" VerticalAlignment="Top" Width="75" Click="NextButtonClicked"/>
         <Button Content="Przywroć" HorizontalAlignment="Left" Margin="331,411,0,0" VerticalAlignment="Top" Width="75" Click="RevertButtonClicked"/>
         <Button Content="Poprzedni" HorizontalAlignment="Left" Margin="45,411,0,0" VerticalAlignment="Top" Width="75" Click="PreviousButtonClicked"/>
         <Button x:Name="wnd_btn_showlayer" Content="Show Layer" IsEnabled="false" HorizontalAlignment="Left" Margin="509,411,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
@@ -58,6 +58,7 @@
         <Label Content="Ilość iteracji" HorizontalAlignment="Left" Margin="480,373,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="wnd_iter" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="20" Margin="435,375,0,0" TextWrapping="Wrap" Text="50" VerticalAlignment="Top" Width="40"/>
         <oxy:PlotView x:Name="plot1" Model="{Binding ScatterModel}"  Margin="634,60,28.6,60.4"/>
+        <Button x:Name="wnd_sym_button" Content="Start Simulation" HorizontalAlignment="Left" Margin="238,411,0,0" VerticalAlignment="Top" Width="88" Click="StartSimButton"/>
 
     </Grid>
 </Window>

@@ -21,6 +21,7 @@ namespace Simplex
         static public string precision { get; set; } = "F4";
 
         public List<string> calculations;
+        public List<List<double[]>> simplex_points;
         private Function function;
         private int vars_number;
         private int tips_number;
@@ -30,7 +31,6 @@ namespace Simplex
         //private double[] Pp;
         private int h, L, ZW, licznik;
 
-        public List<List<double[]>> points;
         static public event Action<double[]> CalculatedSucc;
 
         public Algorithm(Function fn, List<Tuple<double, double>> lm)
@@ -39,16 +39,15 @@ namespace Simplex
             limits = lm;
             vars_number = function.getArgumentsNumber();
             tips_number = vars_number + 1;
-            points = new List<List<double[]>>();
             simplex = new List<double[]>();
             calculations = new List<string>();
+            simplex_points = new List<List<double[]>>();
         }
 
         public void Initialize()
         {
             calculations.Clear();
             RandPoints();
-            points.Add(simplex);
             RunSimplexRun();
         }
 
@@ -65,6 +64,8 @@ namespace Simplex
 
             //calculations.Add(UpdateString(licznik, simplex, simplex[h], function.calculate(Pp)));
             calculations.Add(UpdateString(licznik, simplex, simplex[L], simplex_val[L]));
+            List<double[]> copy = new List<double[]>(simplex);
+            simplex_points.Add(copy);
 
             var Ps = Reflection(simplex[h], Pp, a);
             var Fs = function.calculate(Pp);

@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -39,6 +40,8 @@ namespace Simplex
             get { return (PlotViewModel)DataContext; }
         }
         public PlotModel ScatterModel { get; set; }
+        private Timer timer;
+
 
         public MainWindow()
         {
@@ -68,6 +71,7 @@ namespace Simplex
                     wnd_debug.Text = wnd_debug.Text + s + "\n";
                 }
             }
+            this.wnd_sym_button.IsEnabled = true;
             debug_index = -1;
         }
 
@@ -85,24 +89,6 @@ namespace Simplex
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            //var lyr = new Layer();
-            //lyr.Show();
-
-            //var s2 = new LineSeries
-            //{
-            //    StrokeThickness = 1,
-            //    MarkerSize = 1,
-            //    MarkerStroke = OxyColors.ForestGreen,
-            //    MarkerType = MarkerType.Plus
-            //};
-
-            //for (int i = 0; i < 100; i++)
-            //{
-            //    s2.Points.Add(new DataPoint(i, i));
-            //}
-            //ScatterModel.Series.Add(s2);
-            //ScatterModel.Series.Add(new FunctionSeries(Math.Sin, 0, 10, 0.1, gui_fun.getDescription()));
-            //PlotViewModel.ScatterModel = ScatterModel;
             ScatterModel = new PlotModel();
 
             ScatterModel.Axes.Add(new LinearColorAxis
@@ -111,11 +97,10 @@ namespace Simplex
                 IsAxisVisible = false
             });
 
-            double x0 = gui_limits[0].Item1;
-            double x1 = gui_limits[0].Item2;
-            double y0 = gui_limits[1].Item1;
-            double y1 = gui_limits[1].Item2;
-
+            var x0 = alg.simplex_points.Min(el => el.Min(x => x[0]));
+            var x1 = alg.simplex_points.Max(el => el.Max(x => x[0]));
+            var y0 = alg.simplex_points.Min(el => el.Min(y => y[1]));
+            var y1 = alg.simplex_points.Max(el => el.Max(y => y[1]));
 
             Func<double, double, double> peaks = (x, y) => gui_fun.calculate(x, y);
             var xx = ArrayBuilder.CreateVector(x0, x1, 100);
@@ -134,15 +119,38 @@ namespace Simplex
             var cs = new ContourSeries
             {
                 Color = OxyColors.Black,
-                //LabelBackground = OxyColors.White,
-                ColumnCoordinates = yy,
-                RowCoordinates = xx,
+                LabelBackground = OxyColors.White,
+                ColumnCoordinates = xx,
+                RowCoordinates = yy,
                 Data = peaksData
             };
+
             ScatterModel.Series.Add(heatMapSeries);
             ScatterModel.Series.Add(cs);
+
             PlotViewModel.ScatterModel = null;
             PlotViewModel.ScatterModel = ScatterModel;
+        }
+
+        private void UpdateChart()
+        {
+            if (alg != null)
+            {
+                LineSeries lineSeries1 = new LineSeries();
+                var points = alg.simplex_points[debug_index];
+                foreach (var p in points)
+                {
+                    lineSeries1.Points.Add(new DataPoint(p[0], p[1]));
+                }
+                lineSeries1.Points.Add(new DataPoint(points.First()[0], points.First()[1]));
+                //lineSeries1.Points.Add(new DataPoint(-2, -2));
+                //lineSeries1.Points.Add(new DataPoint(-5, 5));
+
+                //  ScatterModel = new PlotModel();
+                ScatterModel.Series.Add(lineSeries1);
+                PlotViewModel.ScatterModel = ScatterModel;
+                ScatterModel.InvalidatePlot(true);
+            }
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -350,6 +358,8 @@ namespace Simplex
 
         private void Wnd_restart_Click(object sender, RoutedEventArgs e)
         {
+            calc_active_flag = false;
+
             wnd_oblicz.Visibility = Visibility.Visible;
             wnd_restart.Visibility = Visibility.Hidden;
 
@@ -366,6 +376,11 @@ namespace Simplex
             debug_index = -1;
 
             PlotViewModel.ScatterModel = null;
+            if (timer != null)
+            {
+                timer.Stop();
+                timer = null;
+            }
         }
 
         private void HideAllConditions()
@@ -427,7 +442,7 @@ namespace Simplex
 
         private void NextButtonClicked(object sender, RoutedEventArgs e)
         {
-            if (alg != null)
+            if (alg != null && calc_active_flag == true)
             {
                 if (debug_index == -1)
                 {
@@ -437,13 +452,22 @@ namespace Simplex
                 else if (debug_index < alg.calculations.Count - 1)
                 {
                     wnd_debug.Text = alg.calculations[++debug_index];
+                    UpdateChart();
+                }
+                else
+                {
+                    if (timer != null)
+                    {
+                        timer.Stop();
+                        timer = null;
+                    }
                 }
             }
         }
 
         private void RevertButtonClicked(object sender, RoutedEventArgs e)
         {
-            if (alg != null)
+            if (alg != null && calc_active_flag == true)
             {
                 wnd_debug.Text = "";
                 foreach (var s in alg.calculations)
@@ -451,12 +475,19 @@ namespace Simplex
                     wnd_debug.Text = wnd_debug.Text + s + "\n";
                 }
                 debug_index = -1;
+
+                if (timer != null)
+                {
+                    timer.Stop();
+                    timer = null;
+                }
+                this.wnd_sym_button.IsEnabled = true;
             }
         }
 
         private void PreviousButtonClicked(object sender, RoutedEventArgs e)
         {
-            if (alg != null)
+            if (alg != null && calc_active_flag == true)
             {
                 if (debug_index == -1)
                 {
@@ -468,6 +499,25 @@ namespace Simplex
                     wnd_debug.Text = alg.calculations[--debug_index];
                 }
             }
+        }
+
+        private void StartSimButton(object sender, RoutedEventArgs e)
+        {
+            if (alg != null && calc_active_flag == true)
+            {
+                this.wnd_sym_button.IsEnabled = false;
+                timer = new Timer(1000);
+                timer.Elapsed += OnTimerElapsed;
+                timer.Start();
+            }
+        }
+
+        private void OnTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                NextButtonClicked(sender, new RoutedEventArgs());
+            });
         }
     }
 }
