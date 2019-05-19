@@ -29,6 +29,7 @@ namespace Simplex
         private List<Tuple<double, double>> limits;
         private List<double[]> simplex;
         private List<double> simplex_val;
+        private bool f_break;
         //private double[] Pp;
         private int h, L, licznik;
 
@@ -54,121 +55,138 @@ namespace Simplex
 
         public void RunSimplexRun()
         {
-            licznik++;
-
-            simplex_val = CalculateFunction();
-
-            h = simplex_val.IndexOf(simplex_val.Max());
-            L = simplex_val.IndexOf(simplex_val.Min());
-
-            var Pp = CalculateCenter();
-
-            //calculations.Add(UpdateString(licznik, simplex, simplex[h], function.calculate(Pp)));
-            calculations.Add(UpdateString(licznik, simplex, simplex[L], simplex_val[L]));
-
-            if (isTwoDimProb)
+            while (true)
             {
-                List<double[]> copy = new List<double[]>(simplex);
-                simplex_points.Add(copy);
-            }
+                licznik++;
 
-            var Ps = Reflection(simplex[h], Pp, a);
-            var Fs = function.calculate(Pp);
-            var Fo = function.calculate(Ps);
-
-            if (Fo < simplex_val[L])
-            {
-                var Pss = Expansion(Ps, Pp, c);
-                var Fe = function.calculate(Pss);
-
-                if (Fe < simplex_val[h])
+                try
                 {
-                    simplex[h] = Pss;
+                    simplex_val = CalculateFunction();
                 }
-                else
+                catch
                 {
-                    simplex[h] = Ps;
+                    Debug.WriteLine("Error while calculating function");
                 }
 
-                if (isMinCondReached() || licznik >= max_licznik)
+                h = simplex_val.IndexOf(simplex_val.Max());
+                L = simplex_val.IndexOf(simplex_val.Min());
+
+                var Pp = CalculateCenter();
+
+                //calculations.Add(UpdateString(licznik, simplex, simplex[h], function.calculate(Pp)));
+                calculations.Add(UpdateString(licznik, simplex, simplex[L], simplex_val[L]));
+
+                if (isTwoDimProb)
                 {
-                    CalculatedSucc(Pp);
-                    return;
+                    List<double[]> copy = new List<double[]>(simplex);
+                    simplex_points.Add(copy);
                 }
-                else
+
+                var Ps = Reflection(simplex[h], Pp, a);
+                var Fs = function.calculate(Pp);
+                var Fo = function.calculate(Ps);
+
+                if (Fo < simplex_val[L])
                 {
-                    RunSimplexRun();
-                }
-            }
-            else
-            {
-                bool break_f = false;
-                for (int i = 0; i < tips_number; i++)
-                {
-                    if (Fo > simplex_val[i] && i != h)
+                    var Pss = Expansion(Ps, Pp, c);
+                    var Fe = function.calculate(Pss);
+
+                    if (Fe < simplex_val[h])
                     {
-                        break_f = true;
-                        break;
-                    }
-                }
-
-                if (break_f == true)
-                {
-                    if (Fo < simplex_val[h])
-                    {
-                        this.simplex[h] = Ps;
-                    }
-
-                    var Psss = Contraction(simplex[h], Pp, b);
-                    var Fk = function.calculate(Psss);
-
-                    if (Fk < simplex_val[h])
-                    {
-                        simplex[h] = Psss;
-
-                        if (isMinCondReached())
-                        {
-                            CalculatedSucc(Pp);
-                        }
-                        else
-                        {
-                            RunSimplexRun();
-                        }
+                        simplex[h] = Pss;
                     }
                     else
                     {
-                        // wykonanie redukcji simpleksu
-                        foreach (var t in simplex)
-                        {
-                            for (int i = 0; i < vars_number; i++)
-                            {
-                                t[i] = 0.5 * (t[i] + simplex[L][i]);
-                            }
-                        }
-
-                        if (isMinCondReached() || licznik >= max_licznik)
-                        {
-                            CalculatedSucc(Pp);
-                        }
-                        else
-                        {
-                            RunSimplexRun();
-                        }
+                        simplex[h] = Ps;
                     }
-
-                }
-
-                else
-                {
-                    simplex[h] = Ps;
 
                     if (isMinCondReached() || licznik >= max_licznik)
                     {
                         CalculatedSucc(Pp);
+                        return;
                     }
+                    //else
+                    //{
+                    //    goto endofloop;
+                    //    RunSimplexRun();
+                    //}
+                }
+                else
+                {
+                    bool break_f = false;
+                    for (int i = 0; i < tips_number; i++)
+                    {
+                        if (Fo > simplex_val[i] && i != h)
+                        {
+                            break_f = true;
+                            break;
+                        }
+                    }
+
+                    if (break_f == true)
+                    {
+                        if (Fo < simplex_val[h])
+                        {
+                            this.simplex[h] = Ps;
+                        }
+
+                        var Psss = Contraction(simplex[h], Pp, b);
+                        var Fk = function.calculate(Psss);
+
+                        if (Fk < simplex_val[h])
+                        {
+                            simplex[h] = Psss;
+
+                            if (isMinCondReached())
+                            {
+                                CalculatedSucc(Pp);
+                                return;
+                            }
+                            //else
+                            //{
+                              //  goto endofloop;
+                               // RunSimplexRun();
+                            //}
+                        }
+                        else
+                        {
+                            // wykonanie redukcji simpleksu
+                            foreach (var t in simplex)
+                            {
+                                for (int i = 0; i < vars_number; i++)
+                                {
+                                    t[i] = 0.5 * (t[i] + simplex[L][i]);
+                                }
+                            }
+
+                            if (isMinCondReached() || licznik >= max_licznik)
+                            {
+                                CalculatedSucc(Pp);
+                                return;
+                            }
+                            //else
+                            //{
+                                //break;
+                                //RunSimplexRun();
+                            //}
+                        }
+
+                    }
+
                     else
                     {
-                        RunSimplexRun();
+                        simplex[h] = Ps;
+
+                        if (isMinCondReached() || licznik >= max_licznik)
+                        {
+                            CalculatedSucc(Pp);
+                            return;
+                        }
+                        //else
+                        //{
+                            //break;
+                            //RunSimplexRun();
+                        //}
                     }
                 }
             }

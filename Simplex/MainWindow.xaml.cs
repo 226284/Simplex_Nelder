@@ -102,10 +102,25 @@ namespace Simplex
                 IsAxisVisible = false
             });
 
-            var x0 = alg.simplex_points.Min(el => el.Min(x => x[0]));
+            /*var x0 = alg.simplex_points.Min(el => el.Min(x => x[0]));
             var x1 = alg.simplex_points.Max(el => el.Max(x => x[0]));
             var y0 = alg.simplex_points.Min(el => el.Min(y => y[1]));
-            var y1 = alg.simplex_points.Max(el => el.Max(y => y[1]));
+            var y1 = alg.simplex_points.Max(el => el.Max(y => y[1]));*/
+            var x0 = alg.simplex_points[0][0][0];
+            var x1 = 0.0;
+            var y0 = alg.simplex_points[0][0][1];
+            var y1 = 0.0;
+
+            foreach (var s in alg.simplex_points)
+            {
+                foreach (var p in s)
+                {
+                    if (p[0] < x0) x0 = p[0];
+                    if (p[0] > x1) x1 = p[0];
+                    if (p[1] < y0) y0 = p[1];
+                    if (p[1] > y1) y1 = p[1];
+                }
+            }
 
             Func<double, double, double> peaks = (x, y) => gui_fun.calculate(x, y);
             var xx = ArrayBuilder.CreateVector(x0, x1, 100);
@@ -524,7 +539,7 @@ namespace Simplex
             {
                 this.wnd_sym_button.IsEnabled = false;
                 this.wnd_btn_showlayer.IsEnabled = false;
-                timer = new Timer(1000);
+                timer = new Timer(400);
                 timer.AutoReset = false;
                 timer.Elapsed += OnTimerElapsed;
                 timer.Start();
@@ -546,8 +561,7 @@ namespace Simplex
                 {
                     timer.Enabled = true;
                 }
-            }
-            
+            }            
         }
     }
 }
