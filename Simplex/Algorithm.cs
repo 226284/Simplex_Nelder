@@ -74,7 +74,7 @@ namespace Simplex
                 var Pp = CalculateCenter();
 
                 //calculations.Add(UpdateString(licznik, simplex, simplex[h], function.calculate(Pp)));
-                calculations.Add(UpdateString(licznik, simplex, simplex[L], simplex_val[L]));
+                calculations.Add(UpdateString(licznik, simplex, simplex_val, simplex[L], simplex_val[L]));
 
                 if (isTwoDimProb)
                 {
@@ -144,8 +144,8 @@ namespace Simplex
                             }
                             //else
                             //{
-                              //  goto endofloop;
-                               // RunSimplexRun();
+                            //  goto endofloop;
+                            // RunSimplexRun();
                             //}
                         }
                         else
@@ -166,8 +166,8 @@ namespace Simplex
                             }
                             //else
                             //{
-                                //break;
-                                //RunSimplexRun();
+                            //break;
+                            //RunSimplexRun();
                             //}
                         }
 
@@ -184,8 +184,8 @@ namespace Simplex
                         }
                         //else
                         //{
-                            //break;
-                            //RunSimplexRun();
+                        //break;
+                        //RunSimplexRun();
                         //}
                     }
                 }
@@ -321,7 +321,7 @@ namespace Simplex
             return false;
         }
 
-        private string UpdateString(int iter, List<double[]> points, double[] center, double val)
+        private string UpdateString(int iter, List<double[]> points, List<double> p_val, double[] center, double val)
         {
             string string_obj = "----------ITERACJA: " + iter + "----------\n";
             var variables = new string[] { "x1", "x2", "x3", "x4", "x5" };
@@ -334,6 +334,7 @@ namespace Simplex
                 {
                     string_obj += "  " + variables[Array.IndexOf(p, d)] + ": [" + d.ToString(precision) + "]" + "\n";
                 }
+                string_obj += "  f(P" + points.IndexOf(p) + ") = " + p_val[points.IndexOf(p)] + "\n";
             }
 
             //string_obj += "\nŚrodek symetrii w punkcie:\n";

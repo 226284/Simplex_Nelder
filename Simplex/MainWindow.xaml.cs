@@ -66,10 +66,10 @@ namespace Simplex
 
             if (alg != null)
             {
-                foreach (var s in alg.calculations)
+                /*foreach (var s in alg.calculations)
                 {
                     wnd_debug.Text = wnd_debug.Text + s + "\n";
-                }
+                }*/
 
                 if (alg.isTwoDimProb)
                 {
@@ -146,7 +146,10 @@ namespace Simplex
             };
 
             ScatterModel.Series.Add(heatMapSeries);
-            ScatterModel.Series.Add(cs);
+            if (wnd_contour.IsChecked == true)
+            {
+                ScatterModel.Series.Add(cs);
+            }
 
             PlotViewModel.ScatterModel = null;
             PlotViewModel.ScatterModel = ScatterModel;
@@ -495,11 +498,11 @@ namespace Simplex
         {
             if (alg != null && calc_active_flag == true)
             {
-                wnd_debug.Text = "";
+                /*wnd_debug.Text = "";
                 foreach (var s in alg.calculations)
                 {
                     wnd_debug.Text = wnd_debug.Text + s + "\n";
-                }
+                }*/
                 debug_index = -1;
 
                 if (alg.isTwoDimProb)
@@ -562,6 +565,11 @@ namespace Simplex
                     timer.Enabled = true;
                 }
             }            
+        }
+
+        private void Wnd_c_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }
