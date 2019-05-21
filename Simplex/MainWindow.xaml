@@ -11,58 +11,54 @@
         <local:PlotViewModel/>
     </Window.DataContext>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="9*"/>
-            <ColumnDefinition Width="133*"/>
-        </Grid.ColumnDefinitions>
-        <Button x:Name="wnd_oblicz" Content="Oblicz" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="446.2,30,0,0" Height="22" Click="Button_Click_3" Grid.Column="1"/>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="330" Margin="45,60,0,0" VerticalAlignment="Top" Width="361" Grid.ColumnSpan="2">
+        <Button x:Name="wnd_oblicz" Content="Oblicz" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="446.2,30,0,0" Height="22" Click="Button_Click_3" />
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="330" Margin="15,60,0,0" VerticalAlignment="Top" Width="340">
             <TextBox x:Name="wnd_debug" TextWrapping="Wrap" Text="" VerticalScrollBarVisibility="Visible" IsReadOnly="True"/>
         </Border>
-        <TextBlock HorizontalAlignment="Left" Margin="45,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="96" Height="19" Grid.ColumnSpan="2"><Run Text="Funkcja:"/><LineBreak/><Run/></TextBlock>
-        <TextBox x:Name="wnd_fun" HorizontalAlignment="Left" Height="23" Margin="45,30,0,0" TextWrapping="Wrap" Text="f(x,y)=x^2+y^2" VerticalAlignment="Top" Width="361" KeyDown="Wnd_fun_KeyDown" Grid.ColumnSpan="2"/>
+        <TextBlock HorizontalAlignment="Left" Margin="15,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="96" Height="19"><Run Text="Funkcja:"/><LineBreak/><Run/></TextBlock>
+        <TextBox x:Name="wnd_fun" HorizontalAlignment="Left" Height="23" Margin="15,30,0,0" TextWrapping="Wrap" Text="f(x,y)=x^2+y^2" VerticalAlignment="Top" Width="340" KeyDown="Wnd_fun_KeyDown"/>
+        <Button Content="Pomoc" HorizontalAlignment="Left" Margin="280,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_2" />
 
-        <TextBox x:Name="wnd_mincond1" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="379.2,90,0,0" TextWrapping="WrapWithOverflow" Text="-10" VerticalAlignment="Top" Width="34" Grid.Column="1"/>
-        <TextBox x:Name="wnd_maxcond1" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="466.2,90,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="34" Grid.Column="1"/>
-        <TextBlock x:Name="wnd_varcond1" Visibility="Visible"  HorizontalAlignment="Left" Margin="421.2,90,0,0" TextWrapping="Wrap" Text="&lt; x1 &lt;" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBox x:Name="wnd_mincond1" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="379.2,90,0,0" TextWrapping="WrapWithOverflow" Text="-10" VerticalAlignment="Top" Width="34" />
+        <TextBox x:Name="wnd_maxcond1" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="466.2,90,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="34" />
+        <TextBlock x:Name="wnd_varcond1" Visibility="Visible"  HorizontalAlignment="Left" Margin="421.2,90,0,0" TextWrapping="Wrap" Text="&lt; x1 &lt;" VerticalAlignment="Top" />
 
-        <TextBox x:Name="wnd_mincond2" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="379.2,121,0,0" TextWrapping="Wrap" Text="-10" VerticalAlignment="Top" Width="34" Grid.Column="1"/>
-        <TextBox x:Name="wnd_maxcond2" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="466.2,121,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="34" Grid.Column="1"/>
-        <TextBlock  x:Name="wnd_varcond2" Visibility="Visible" HorizontalAlignment="Left" Margin="421.2,120,0,0" TextWrapping="Wrap" Text="&lt; x2 &lt;" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBox x:Name="wnd_mincond2" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="379.2,121,0,0" TextWrapping="Wrap" Text="-10" VerticalAlignment="Top" Width="34" />
+        <TextBox x:Name="wnd_maxcond2" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="466.2,121,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="34" />
+        <TextBlock  x:Name="wnd_varcond2" Visibility="Visible" HorizontalAlignment="Left" Margin="421.2,120,0,0" TextWrapping="Wrap" Text="&lt; x2 &lt;" VerticalAlignment="Top" />
 
-        <TextBox x:Name="wnd_mincond3" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="379.2,150,0,0" TextWrapping="Wrap" Text="-10" VerticalAlignment="Top" Width="34" Grid.Column="1"/>
-        <TextBox x:Name="wnd_maxcond3" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="466.2,150,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="34" Grid.Column="1"/>
-        <TextBlock  x:Name="wnd_varcond3" Visibility="Visible"  HorizontalAlignment="Left" Margin="421.2,150,0,0" TextWrapping="Wrap" Text="&lt; x3 &lt;" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBox x:Name="wnd_mincond3" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="379.2,150,0,0" TextWrapping="Wrap" Text="-10" VerticalAlignment="Top" Width="34" />
+        <TextBox x:Name="wnd_maxcond3" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="466.2,150,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="34" />
+        <TextBlock  x:Name="wnd_varcond3" Visibility="Visible"  HorizontalAlignment="Left" Margin="421.2,150,0,0" TextWrapping="Wrap" Text="&lt; x3 &lt;" VerticalAlignment="Top" />
 
-        <TextBox x:Name="wnd_mincond4" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="379.2,180,0,0" TextWrapping="Wrap" Text="-10" VerticalAlignment="Top" Width="34" Grid.Column="1"/>
-        <TextBox x:Name="wnd_maxcond4" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="466.2,180,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="34" Grid.Column="1"/>
-        <TextBlock  x:Name="wnd_varcond4" Visibility="Visible" HorizontalAlignment="Left" Margin="421.2,180,0,0" TextWrapping="Wrap" Text="&lt; x4 &lt;" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBox x:Name="wnd_mincond4" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="379.2,180,0,0" TextWrapping="Wrap" Text="-10" VerticalAlignment="Top" Width="34" />
+        <TextBox x:Name="wnd_maxcond4" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="466.2,180,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="34" />
+        <TextBlock  x:Name="wnd_varcond4" Visibility="Visible" HorizontalAlignment="Left" Margin="421.2,180,0,0" TextWrapping="Wrap" Text="&lt; x4 &lt;" VerticalAlignment="Top" />
 
-        <TextBox x:Name="wnd_mincond5" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="379.2,210,0,0" TextWrapping="Wrap" Text="-10" VerticalAlignment="Top" Width="34" Grid.Column="1"/>
-        <TextBox x:Name="wnd_maxcond5" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="466.2,210,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="34" Grid.Column="1"/>
-        <TextBlock  x:Name="wnd_varcond5" Visibility="Visible" HorizontalAlignment="Left" Margin="421.2,210,0,0" TextWrapping="Wrap" Text="&lt; x5 &lt;" VerticalAlignment="Top" Grid.Column="1"/>
-        <Button x:Name="wnd_btn_next" Content="Następny" HorizontalAlignment="Left" Margin="62.2,411,0,0" VerticalAlignment="Top" Width="75" Click="NextButtonClicked" Grid.Column="1"/>
-        <Button Content="Przywroć" HorizontalAlignment="Left" Margin="268.2,411,0,0" VerticalAlignment="Top" Width="75" Click="RevertButtonClicked" Grid.Column="1"/>
-        <Button Content="Poprzedni" HorizontalAlignment="Left" Margin="45,411,0,0" VerticalAlignment="Top" Width="75" Click="PreviousButtonClicked" Grid.ColumnSpan="2"/>
-        <CheckBox x:Name="wnd_contour" Content="Izolinie" Grid.Column="1" HorizontalAlignment="Left" Margin="378.8,413,0,0" VerticalAlignment="Top" IsChecked="True"/>
-        <Button x:Name="wnd_btn_showlayer" Content="Rysuj" IsEnabled="false" HorizontalAlignment="Left" Margin="446.2,411,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1" Grid.Column="1"/>
-        <Button Content="Pomoc" HorizontalAlignment="Left" Margin="267.8,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_2" Grid.Column="1"/>
-        <GroupBox Header="Warunki brzegowe" HorizontalAlignment="Left" Height="186" Margin="363.2,60,0,0" VerticalAlignment="Top" Width="158" Grid.Column="1"/>
-        <Button Content="Zatwierdź" HorizontalAlignment="Left" VerticalAlignment="Top" Width="65" Margin="348.2,30,0,0" Height="22" Click="Button_Click_4" Grid.Column="1"/>
-        <GroupBox Header="Parametry" HorizontalAlignment="Left" Height="155" Margin="363.2,251,0,0" VerticalAlignment="Top" Width="158" Grid.Column="1">
+        <TextBox x:Name="wnd_mincond5" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="379.2,210,0,0" TextWrapping="Wrap" Text="-10" VerticalAlignment="Top" Width="34" />
+        <TextBox x:Name="wnd_maxcond5" Visibility="Visible" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Height="20" Margin="466.2,210,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="34" />
+        <TextBlock  x:Name="wnd_varcond5" Visibility="Visible" HorizontalAlignment="Left" Margin="421.2,210,0,0" TextWrapping="Wrap" Text="&lt; x5 &lt;" VerticalAlignment="Top" />
+        <Button x:Name="wnd_btn_next" Content="Następny" HorizontalAlignment="Left" Margin="95,411,0,0" VerticalAlignment="Top" Width="75" Click="NextButtonClicked" />
+        <Button Content="Przywroć" HorizontalAlignment="Left" Margin="280,411,0,0" VerticalAlignment="Top" Width="75" Click="RevertButtonClicked" />
+        <Button Content="Poprzedni" HorizontalAlignment="Left" Margin="15,411,0,0" VerticalAlignment="Top" Width="75" Click="PreviousButtonClicked"/>
+        <GroupBox Header="Warunki brzegowe" HorizontalAlignment="Left" Height="186" Margin="363.2,60,0,0" VerticalAlignment="Top" Width="158" />
+        <Button Content="Zatwierdź" HorizontalAlignment="Left" VerticalAlignment="Top" Width="65" Margin="360,30,0,0" Height="22" Click="Button_Click_4" />
+        <GroupBox Header="Parametry" HorizontalAlignment="Left" Height="155" Margin="363.2,251,0,0" VerticalAlignment="Top" Width="158" >
         </GroupBox>
-        <TextBox x:Name="wnd_a" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="20" Margin="372.2,275,0,0" TextWrapping="Wrap" Text="1,0" VerticalAlignment="Top" Width="40" Grid.Column="1"/>
-        <TextBox x:Name="wnd_b" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="20" Margin="372.2,300,0,0" TextWrapping="Wrap" Text="0,5" VerticalAlignment="Top" Width="40" Grid.Column="1"/>
-        <Label Content="Współ. odbicia" HorizontalAlignment="Left" Margin="417.2,270,0,0" VerticalAlignment="Top" Grid.Column="1"/>
-        <Label Content="Współ. kontrakcji" HorizontalAlignment="Left" Margin="417.2,295,0,0" VerticalAlignment="Top" Grid.Column="1"/>
-        <Label Content="Współ. ekspansji" HorizontalAlignment="Left" Margin="417.2,321,0,0" VerticalAlignment="Top" Grid.Column="1"/>
-        <TextBox x:Name="wnd_c" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="20" Margin="372.2,325,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="40" Grid.Column="1" TextChanged="Wnd_c_TextChanged"/>
-        <TextBox x:Name="wnd_epsilon" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="20" Margin="372.2,350,0,0" TextWrapping="Wrap" Text="0,001" VerticalAlignment="Top" Width="40" Grid.Column="1"/>
-        <Label Content="Wart. błędu" HorizontalAlignment="Left" Margin="417.2,347,0,0" VerticalAlignment="Top" Grid.Column="1"/>
-        <Button x:Name="wnd_restart" Visibility="Hidden" Content="Restart" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="446.2,30,0,0" Height="22" Click="Wnd_restart_Click" Grid.Column="1"/>
-        <Label Content="Ilość iteracji" HorizontalAlignment="Left" Margin="417.2,373,0,0" VerticalAlignment="Top" Grid.Column="1"/>
-        <TextBox x:Name="wnd_iter" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="20" Margin="372.2,375,0,0" TextWrapping="Wrap" Text="50" VerticalAlignment="Top" Width="40" Grid.Column="1"/>
-        <oxy:PlotView x:Name="plot1" Model="{Binding ScatterModel}"  Margin="547.2,20,19.6,20.4" Grid.Column="1"/>
-        <Button x:Name="wnd_sym_button" Content="Start Symulacji" HorizontalAlignment="Left" Margin="175.2,411,0,0" VerticalAlignment="Top" Width="88" Click="StartSimButton" Grid.Column="1"/>
+        <TextBox x:Name="wnd_a" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="20" Margin="372.2,275,0,0" TextWrapping="Wrap" Text="1,0" VerticalAlignment="Top" Width="40" />
+        <TextBox x:Name="wnd_b" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="20" Margin="372.2,300,0,0" TextWrapping="Wrap" Text="0,5" VerticalAlignment="Top" Width="40" />
+        <Label Content="Współ. odbicia" HorizontalAlignment="Left" Margin="417.2,270,0,0" VerticalAlignment="Top" />
+        <Label Content="Współ. kontrakcji" HorizontalAlignment="Left" Margin="417.2,295,0,0" VerticalAlignment="Top" />
+        <Label Content="Współ. ekspansji" HorizontalAlignment="Left" Margin="417.2,321,0,0" VerticalAlignment="Top" />
+        <TextBox x:Name="wnd_c" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="20" Margin="372.2,325,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="40"  TextChanged="Wnd_c_TextChanged"/>
+        <TextBox x:Name="wnd_epsilon" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="20" Margin="372.2,350,0,0" TextWrapping="Wrap" Text="0,001" VerticalAlignment="Top" Width="40" />
+        <Label Content="Wart. błędu" HorizontalAlignment="Left" Margin="417.2,347,0,0" VerticalAlignment="Top" />
+        <Button x:Name="wnd_restart" Visibility="Hidden" Content="Restart" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="446.2,30,0,0" Height="22" Click="Wnd_restart_Click" />
+        <Label Content="Ilość iteracji" HorizontalAlignment="Left" Margin="417.2,373,0,0" VerticalAlignment="Top" />
+        <TextBox x:Name="wnd_iter" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Height="20" Margin="372.2,375,0,0" TextWrapping="Wrap" Text="50" VerticalAlignment="Top" Width="40" />
+        <oxy:PlotView x:Name="plot1" Model="{Binding ScatterModel}"  Margin="547.2,20,19.6,20.4" />
+        <Button x:Name="wnd_sym_button" Content="Start Symulacji" HorizontalAlignment="Left" Margin="185,411,0,0" VerticalAlignment="Top" Width="88" Click="StartSimButton" />
+        <CheckBox x:Name="wnd_contour" Content="Izolinie"  HorizontalAlignment="Left" Margin="378.8,413,0,0" VerticalAlignment="Top" IsChecked="True"/>
+        <Button x:Name="wnd_btn_showlayer" Content="Rysuj" IsEnabled="false" HorizontalAlignment="Left" Margin="446.2,411,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1" />
     </Grid>
 </Window>

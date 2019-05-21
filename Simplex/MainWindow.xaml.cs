@@ -52,7 +52,7 @@ namespace Simplex
             Algorithm.CalculatedSucc += OnCalculatedSucc;
         }
 
-        private void OnCalculatedSucc(double[] obj)
+        private void OnCalculatedSucc(double[] obj, double val)
         {
             string string_obj = "";
             var variables = new string[] { "x1", "x2", "x3", "x4", "x5" };
@@ -62,7 +62,7 @@ namespace Simplex
                 string_obj += variables[Array.IndexOf(obj, d)] + ": [" + d.ToString() + "]" + "\n";
             }
 
-            MessageBoxResult result = MessageBox.Show(this, "Obliczono pomyślnie:\n" + string_obj, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBoxResult result = MessageBox.Show(this, "Obliczono pomyślnie:\n\nWspółrzędne punktu:\n" + string_obj + "\nWartość w punkcie:\n" + val, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
 
             if (alg != null)
             {
@@ -102,10 +102,10 @@ namespace Simplex
                 IsAxisVisible = false
             });
 
-            /*var x0 = alg.simplex_points.Min(el => el.Min(x => x[0]));
-            var x1 = alg.simplex_points.Max(el => el.Max(x => x[0]));
-            var y0 = alg.simplex_points.Min(el => el.Min(y => y[1]));
-            var y1 = alg.simplex_points.Max(el => el.Max(y => y[1]));*/
+            /*var x0 = this.gui_limits[0].Item1;
+            var x1 = this.gui_limits[0].Item2;
+            var y0 = this.gui_limits[1].Item1;
+            var y1 = this.gui_limits[1].Item2;*/
             var x0 = alg.simplex_points[0][0][0];
             var x1 = 0.0;
             var y0 = alg.simplex_points[0][0][1];

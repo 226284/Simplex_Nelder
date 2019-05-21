@@ -33,7 +33,7 @@ namespace Simplex
         //private double[] Pp;
         private int h, L, licznik;
 
-        static public event Action<double[]> CalculatedSucc;
+        static public event Action<double[],double> CalculatedSucc;
 
         public Algorithm(Function fn, List<Tuple<double, double>> lm)
         {
@@ -102,7 +102,7 @@ namespace Simplex
 
                     if (isMinCondReached() || licznik >= max_licznik)
                     {
-                        CalculatedSucc(Pp);
+                        CalculatedSucc(simplex[L], simplex_val[L]);
                         return;
                     }
                     //else
@@ -139,7 +139,7 @@ namespace Simplex
 
                             if (isMinCondReached())
                             {
-                                CalculatedSucc(Pp);
+                                CalculatedSucc(simplex[L], simplex_val[L]);
                                 return;
                             }
                             //else
@@ -161,7 +161,7 @@ namespace Simplex
 
                             if (isMinCondReached() || licznik >= max_licznik)
                             {
-                                CalculatedSucc(Pp);
+                                CalculatedSucc(simplex[L], simplex_val[L]);
                                 return;
                             }
                             //else
@@ -179,7 +179,7 @@ namespace Simplex
 
                         if (isMinCondReached() || licznik >= max_licznik)
                         {
-                            CalculatedSucc(Pp);
+                            CalculatedSucc(simplex[L], simplex_val[L]);
                             return;
                         }
                         //else
